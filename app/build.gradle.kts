@@ -4,12 +4,12 @@ plugins {
 
 android {
     namespace = "com.example.meetmi"
-    compileSdk = 33
+    compileSdk = 34
 
     defaultConfig {
         applicationId = "com.example.meetmi"
         minSdk = 21
-        targetSdk = 33
+        targetSdk = 34
         versionCode = 1
         versionName = "1.0"
 

@@ -4,15 +4,91 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity">
+    tools:context=".MainActivity"
+    android:background="@drawable/bg_login">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Hello World!"
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="300dp"
+        android:background="#00FFFFFF"
+        android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent">
 
+        <TextView
+            android:id="@+id/textView2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/kodchasan_semibold"
+            android:gravity="center"
+            android:text="Welcome"
+            android:textColor="#FFFFFF"
+            android:textSize="60sp" />
+
+        <TextView
+            android:id="@+id/textView3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="Log in with your Meet Mi account"
+            android:textColor="#FFFFFF" />
+
+        <EditText
+            android:id="@+id/editTextText"
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:layout_marginLeft="50dp"
+            android:layout_marginTop="30dp"
+            android:layout_marginRight="50dp"
+            android:background="#7A000000"
+            android:ems="10"
+            android:hint="Enter your Username"
+            android:inputType="text"
+            android:paddingLeft="5dp"
+            android:text="Username"
+            android:textColor="#FFFFFF" />
+
+        <EditText
+            android:id="@+id/editTextTextPassword"
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:layout_marginLeft="50dp"
+            android:layout_marginTop="15dp"
+            android:layout_marginRight="50dp"
+            android:background="#7A000000"
+            android:ems="10"
+            android:hint="Enter your Password"
+            android:inputType="textPassword"
+            android:paddingLeft="5dp"
+            android:text="Password"
+            android:textColor="#FFFFFF" />
+
+        <Button
+            android:id="@+id/button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="15dp"
+            android:background="#00FFFFFF"
+            android:text=" Forgot Password?"
+            android:textColor="#8D8D8D" />
+
+        <Button
+            android:id="@+id/button2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="50dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginRight="50dp"
+            android:text="Log In"
+            android:textAllCaps="false"
+            android:textColor="#9E9E9E"
+            app:backgroundTint="#FFFFFF"
+            app:cornerRadius="5dp" />
+
+    </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
