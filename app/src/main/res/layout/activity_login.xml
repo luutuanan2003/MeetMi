@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity"
+    tools:context=".LoginActivity"
     android:background="@drawable/bg_login">
 
 
@@ -67,12 +67,21 @@
             android:text="Password"
             android:textColor="#FFFFFF" />
 
+        <TextView
+            android:id="@+id/textView4"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:gravity="center"
+            android:text="Wrong Username or Password"
+            android:textColor="#FF0000" />
+
         <Button
             android:id="@+id/button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_marginTop="15dp"
+            android:layout_marginTop="10dp"
             android:background="#00FFFFFF"
             android:text=" Forgot Password?"
             android:textColor="#8D8D8D" />
