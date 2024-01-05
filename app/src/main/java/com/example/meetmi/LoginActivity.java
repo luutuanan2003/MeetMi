@@ -15,6 +15,8 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+        getWindow().setStatusBarColor(Color.parseColor("#1F1F1F"));
+
         login = (Button) findViewById(R.id.login);
         login.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -23,6 +25,5 @@ public class LoginActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-        getWindow().setStatusBarColor(Color.parseColor("#1F1F1F"));
     }
 }
