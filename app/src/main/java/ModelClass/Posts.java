@@ -3,7 +3,8 @@ package ModelClass;
 public class Posts {
     private String nickname;
     private String avatar; // Assuming this is a path or URL to an avatar image
-    private String photoVideo; // Optional, could be a path or URL
+    private String photo;
+    private String video; // Optional, could be a path or URL
     private String caption;
     private String dateTime; // Typically, this would be a Date or LocalDateTime object
     private String location; // Optional
@@ -32,14 +33,21 @@ public class Posts {
         this.avatar = avatar;
     }
 
-    public String getPhotoVideo() {
-        return photoVideo;
+    public String getPhoto() {
+        return photo;
     }
 
-    public void setPhotoVideo(String photoVideo) {
-        this.photoVideo = photoVideo;
+    public void setPhoto(String photo) {
+        this.photo = photo;
     }
 
+    public String getVideo() {
+        return video;
+    }
+
+    public void setVideo(String video) {
+        this.video = video;
+    }
     public String getCaption() {
         return caption;
     }
