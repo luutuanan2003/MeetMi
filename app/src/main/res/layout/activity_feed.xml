@@ -23,11 +23,12 @@
   <LinearLayout
       android:layout_width="match_parent"
       android:layout_height="match_parent"
+      android:background="#000000"
       android:orientation="vertical">
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent" >
+        android:layout_height="match_parent">
 
       <LinearLayout
           android:layout_width="match_parent"
@@ -36,8 +37,41 @@
 
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_margin="5dp" />
+            android:layout_height="280dp"
+            android:layout_gravity="center"
+            android:layout_margin="5dp"
+            app:cardBackgroundColor="#9C27B0"
+            app:cardCornerRadius="10dp">
+
+          <LinearLayout
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:orientation="vertical">
+
+            <ImageView
+                android:id="@+id/imageView2"
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:layout_gravity="center_horizontal"
+                android:layout_margin="10dp"
+                app:srcCompat="@drawable/samplepic" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="10dp"
+                android:orientation="horizontal">
+
+              <ImageView
+                  android:id="@+id/imageView3"
+                  android:layout_width="183dp"
+                  android:layout_height="wrap_content"
+                  android:layout_weight="1"
+                  app:srcCompat="@drawable/star" />
+            </LinearLayout>
+          </LinearLayout>
+
+        </androidx.cardview.widget.CardView>
       </LinearLayout>
     </ScrollView>
   </LinearLayout>
