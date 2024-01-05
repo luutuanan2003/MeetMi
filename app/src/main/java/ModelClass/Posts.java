@@ -87,4 +87,6 @@ public class Posts {
     public void setReaction(String reaction) {
         this.reaction = reaction;
     }
+
+
 }

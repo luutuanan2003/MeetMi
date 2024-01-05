@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "675313393894",
+    "project_id": "meetmi-5cd8e",
+    "storage_bucket": "meetmi-5cd8e.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:675313393894:android:7ad8afb109626f7fc25b27",
+        "android_client_info": {
+          "package_name": "com.example.meetmi"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCGZDCsKdfcql4A8e_7j9STehbHRX4ZxsA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
