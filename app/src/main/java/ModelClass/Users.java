@@ -7,7 +7,6 @@ public class Users {
     private String username;
     private String password;
     private String avatar;
-    private String id;
     private double latitude;
     private double longitude;
     private List<String> friends;
@@ -16,12 +15,11 @@ public class Users {
     private String nickname;
 
     // Constructor
-    public Users(String username, String password, String avatar, String id, double latitude, double longitude,
+    public Users(String username, String password, String avatar, double latitude, double longitude,
                 List<String> friends, String photoFrameId, List<String> newsfeed, String nickname) {
         this.username = username;
         this.password = password;
         this.avatar = avatar;
-        this.id = id;
         this.latitude = latitude;
         this.longitude = longitude;
         this.friends = friends;
@@ -54,15 +52,6 @@ public class Users {
     public void setAvatar(String avatar) {
         this.avatar = avatar;
     }
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
     public double getLatitude() {
         return latitude;
     }
@@ -118,7 +107,6 @@ public class Users {
                 "username='" + username + '\'' +
                 ", password='" + password + '\'' +
                 ", avatar='" + avatar + '\'' +
-                ", id='" + id + '\'' +
                 ", latitude='" + latitude + '\'' +
                 ", longitude='" + longitude + '\'' +
                 ", friends=" + friends +
