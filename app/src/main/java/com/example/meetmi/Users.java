@@ -1,4 +1,4 @@
-package ModelClass;
+package com.example.meetmi;
 
 import java.util.List;
 import java.util.Map;
@@ -16,6 +16,9 @@ public class Users {
     private String nickname;
 
     // Constructor
+    public Users() {
+        // Default constructor required for Firebase
+    }
     public Users(String username, String password, String avatar, String id, double latitude, double longitude,
                 List<String> friends, String photoFrameId, List<String> newsfeed, String nickname) {
         this.username = username;

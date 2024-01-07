@@ -99,5 +99,16 @@
             app:backgroundTint="#FFFFFF"
             app:cornerRadius="5dp" />
 
+        <!-- Existing layout components -->
+
+        <Button
+            android:id="@+id/signupButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Sign Up" />
+
+        <!-- Rest of your layout -->
+
+
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
