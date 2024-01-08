@@ -5,17 +5,29 @@ import java.util.List;
 
     public class PhotoFrame {
         private String id;
-        private List<String> photoFrameId;
+        private String styleName;
+        private String resource;
 
-        public PhotoFrame(String id) {
+        public PhotoFrame(String id,String styleName, String resource) {
             this.id = id;
-            this.photoFrameId = new ArrayList<>();
+            this.styleName = styleName;
+            this.resource = resource;
         }
 
-        // Method stub for database interaction
-        public List<String> getDPhotoFrame() {
-            // Database logic to retrieve photo frames would go here
-            return new ArrayList<>(); // Placeholder return
+        public String getStyleName() {
+            return styleName;
+        }
+
+        public void setStyleName(String styleName) {
+            this.styleName = styleName;
+        }
+
+        public String getResource() {
+            return resource;
+        }
+
+        public void setResource(String resource) {
+            this.resource = resource;
         }
 
         // Getters and Setters
@@ -27,13 +39,7 @@ import java.util.List;
             this.id = id;
         }
 
-        public List<String> getPhotoFrameId() {
-            return photoFrameId;
-        }
 
-        public void setPhotoFrameId(List<String> photoFrameId) {
-            this.photoFrameId = photoFrameId;
-        }
     }
 
 
