@@ -38,7 +38,7 @@
             android:textColor="#FFFFFF" />
 
         <EditText
-            android:id="@+id/editTextText"
+            android:id="@+id/usernameLogin"
             android:layout_width="match_parent"
             android:layout_height="45dp"
             android:layout_marginLeft="50dp"
@@ -49,11 +49,10 @@
             android:hint="Enter your Username"
             android:inputType="text"
             android:paddingLeft="5dp"
-            android:text="Username"
             android:textColor="#FFFFFF" />
 
         <EditText
-            android:id="@+id/editTextTextPassword"
+            android:id="@+id/passwordLogin"
             android:layout_width="match_parent"
             android:layout_height="45dp"
             android:layout_marginLeft="50dp"
@@ -64,11 +63,10 @@
             android:hint="Enter your Password"
             android:inputType="textPassword"
             android:paddingLeft="5dp"
-            android:text="Password"
             android:textColor="#FFFFFF" />
 
         <TextView
-            android:id="@+id/textView4"
+            android:id="@+id/errorTextLogin"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
@@ -101,11 +99,31 @@
 
         <!-- Existing layout components -->
 
-        <Button
-            android:id="@+id/signupButton"
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Sign Up" />
+            android:layout_gravity="center"
+            android:layout_marginLeft="8dp"
+            android:layout_marginTop="5dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="Don't have a Meet Mi account yet?" />
+
+            <Button
+                android:id="@+id/signupButtonLogin"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:background="#00FFFFFF"
+                android:text="Sign Up"
+                android:textColor="#626262" />
+        </LinearLayout>
 
         <!-- Rest of your layout -->
 

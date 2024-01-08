@@ -7,7 +7,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
+
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -27,17 +27,16 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login);
 
         login = (Button) findViewById(R.id.login);
-        signupButton = (Button) findViewById(R.id.signupButton);
-        usernameField = (EditText) findViewById(R.id.editTextText); // Initialize EditText for username
-        passwordField = (EditText) findViewById(R.id.editTextTextPassword); // Initialize EditText for password
-        errorText = (TextView) findViewById(R.id.textView4); // Initialize TextView for error messages
+        signupButton = (Button) findViewById(R.id.signupButtonLogin);
+        usernameField = (EditText) findViewById(R.id.usernameLogin); // Initialize EditText for username
+        passwordField = (EditText) findViewById(R.id.passwordLogin); // Initialize EditText for password
+        errorText = (TextView) findViewById(R.id.errorTextLogin); // Initialize TextView for error messages
 
         login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 String enteredUsername = usernameField.getText().toString();
                 String enteredPassword = passwordField.getText().toString();
-
                 // Perform authentication
                 authenticateUser(enteredUsername, enteredPassword);
             }

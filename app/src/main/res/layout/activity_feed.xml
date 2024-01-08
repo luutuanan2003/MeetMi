@@ -83,7 +83,6 @@
                   android:layout_height="wrap_content"
                   android:layout_gravity="center"
                   android:layout_weight="1"
-                  android:src="@tools:sample/avatars"
                   tools:srcCompat="@drawable/comment" />
 
             </LinearLayout>
@@ -139,7 +138,6 @@
                   android:layout_height="wrap_content"
                   android:layout_gravity="center"
                   android:layout_weight="1"
-                  android:src="@tools:sample/avatars"
                   tools:srcCompat="@drawable/comment" />
 
             </LinearLayout>
@@ -195,7 +193,6 @@
                   android:layout_height="wrap_content"
                   android:layout_gravity="center"
                   android:layout_weight="1"
-                  android:src="@tools:sample/avatars"
                   tools:srcCompat="@drawable/comment" />
 
             </LinearLayout>
@@ -218,7 +215,6 @@
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:padding="15dp"
-        android:src=""
         app:srcCompat="@drawable/home" />
 
     <ImageView
@@ -226,7 +222,6 @@
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:padding="15dp"
-        android:src="@tools:sample/avatars"
         app:srcCompat="@drawable/search" />
 
     <ImageView
@@ -234,7 +229,6 @@
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:padding="15dp"
-        android:src="@tools:sample/avatars"
         app:srcCompat="@drawable/post" />
 
     <ImageView
@@ -243,7 +237,6 @@
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:padding="15dp"
-        android:src="@tools:sample/avatars"
         app:srcCompat="@drawable/star1" />
 
     <ImageView
@@ -251,7 +244,6 @@
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:padding="15dp"
-        android:src="@tools:sample/avatars"
         app:srcCompat="@drawable/profile" />
   </LinearLayout>
 </LinearLayout>

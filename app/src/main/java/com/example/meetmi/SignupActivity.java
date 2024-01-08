@@ -7,7 +7,6 @@ import android.widget.EditText;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.meetmi.Users;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -32,7 +31,7 @@ public class SignupActivity extends AppCompatActivity {
         // Initialize fields
         usernameField = findViewById(R.id.usernameField);
         passwordField = findViewById(R.id.passwordField);
-        signupButton = findViewById(R.id.signupButton);
+        signupButton = findViewById(R.id.signupButtonLogin);
 
         signupButton.setOnClickListener(new View.OnClickListener() {
             @Override
