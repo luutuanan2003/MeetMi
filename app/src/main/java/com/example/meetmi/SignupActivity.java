@@ -1,6 +1,5 @@
 package com.example.meetmi;
 
-import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -25,7 +24,6 @@ public class SignupActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_signup);
-        getWindow().setStatusBarColor(Color.parseColor("#1F1F1F"));
 
         // Initialize Firebase Database
         mDatabase = FirebaseDatabase.getInstance().getReference();
