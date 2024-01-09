@@ -20,10 +20,9 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <TextView
-            android:id="@+id/textView2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:fontFamily="@font/kodchasan_semibold"
+            android:fontFamily="@font/asap"
             android:gravity="center"
             android:text="Welcome"
             android:textColor="#FFFFFF"
@@ -33,6 +32,7 @@
             android:id="@+id/textView3"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:fontFamily="@font/asap"
             android:gravity="center"
             android:text="Log in with your Meet Mi account"
             android:textColor="#FFFFFF" />
@@ -70,6 +70,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
+            android:fontFamily="@font/asap"
             android:gravity="center"
             android:text="Wrong Username or Password"
             android:textColor="#FF0000" />
@@ -81,6 +82,7 @@
             android:layout_gravity="center"
             android:layout_marginTop="10dp"
             android:background="#00FFFFFF"
+            android:fontFamily="@font/asap"
             android:text=" Forgot Password?"
             android:textColor="#8D8D8D" />
 
@@ -91,6 +93,7 @@
             android:layout_marginLeft="50dp"
             android:layout_marginTop="5dp"
             android:layout_marginRight="50dp"
+            android:fontFamily="sans-serif-medium"
             android:text="Log In"
             android:textAllCaps="false"
             android:textColor="#9E9E9E"
@@ -112,6 +115,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_weight="1"
+                android:fontFamily="@font/asap"
                 android:gravity="center"
                 android:text="Don't have a Meet Mi account yet?" />
 
@@ -121,6 +125,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:background="#00FFFFFF"
+                android:fontFamily="@font/asap"
                 android:text="Sign Up"
                 android:textColor="#626262" />
         </LinearLayout>

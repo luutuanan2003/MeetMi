@@ -48,23 +48,23 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:fontFamily="@font/kodchasan_semibold"
+                    android:fontFamily="@font/asap"
                     android:gravity="center"
                     android:text="Create your account"
-                    android:textSize="20dp" />
+                    android:textSize="25dp" />
 
                 <EditText
                     android:id="@+id/usernameField"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_margin="10dp"
+                    android:layout_margin="15dp"
                     android:hint="Username"
                     android:inputType="textEmailAddress" />
 
                 <EditText
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_margin="10dp"
+                    android:layout_margin="15dp"
                     android:ems="10"
                     android:inputType="textPassword"
                     android:text="Password" />
@@ -73,7 +73,7 @@
                     android:id="@+id/passwordField"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_margin="10dp"
+                    android:layout_margin="15dp"
                     android:hint="Password"
                     android:inputType="textPassword" />
 
