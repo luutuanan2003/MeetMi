@@ -17,7 +17,8 @@
         android:id="@+id/imageView"
         android:layout_width="match_parent"
         android:layout_height="79dp"
-        app:srcCompat="@drawable/logo" />
+        app:srcCompat="@drawable/logo"
+        android:onClick = "goto_postingPost"/>
   </LinearLayout>
 
   <LinearLayout
