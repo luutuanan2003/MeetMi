@@ -1,11 +1,14 @@
 package com.example.meetmi;
 
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.firebase.database.DatabaseReference;
@@ -16,7 +19,7 @@ import java.util.List;
 
 public class SignupActivity extends AppCompatActivity {
 
-    private EditText usernameField, passwordField;
+    private EditText usernameField, passwordField, emailField;
     // Add other relevant fields if needed
     private Button signupButton;
     private DatabaseReference mDatabase;
@@ -34,6 +37,7 @@ public class SignupActivity extends AppCompatActivity {
         usernameField = findViewById(R.id.usernameField);
         passwordField = findViewById(R.id.passwordField);
         signupButton = findViewById(R.id.signupButtonLogin);
+        emailField = findViewById(R.id.user_emailField);
 
         signupButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -44,6 +48,7 @@ public class SignupActivity extends AppCompatActivity {
     }
 
     private void registerUser() {
+        String email = emailField.getText().toString().trim();
         String username = usernameField.getText().toString().trim();
         String password = passwordField.getText().toString().trim();
 
@@ -60,10 +65,27 @@ public class SignupActivity extends AppCompatActivity {
         String nickname = ""; // default or empty
 
         // Creating user object
-        Users user = new Users(username, password, avatar, id, latitude, longitude,
+        Users user = new Users(email,username, password, avatar, id, latitude, longitude,
                 friends, photoFrameId, newsfeed, nickname);
 
         // Saving to Firebase
         mDatabase.child("users").push().setValue(user);
+        showConfirmationDialog();
+    }
+
+    private void showConfirmationDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage("Account has been created successfully.")
+                .setCancelable(false)
+                .setPositiveButton("Back to Sign In", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        // Start the Sign In activity
+                        Intent signInIntent = new Intent(SignupActivity.this, LoginActivity.class);
+                        startActivity(signInIntent);
+                        finish();
+                    }
+                });
+        AlertDialog alert = builder.create();
+        alert.show();
     }
 }

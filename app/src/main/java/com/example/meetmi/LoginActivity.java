@@ -9,6 +9,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -21,6 +22,7 @@ public class LoginActivity extends AppCompatActivity {
     EditText usernameField; // Add EditText for username
     EditText passwordField; // Add EditText for password
     TextView errorText; // Add TextView for error messages
+    private FirebaseAuth mAuth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,6 +35,8 @@ public class LoginActivity extends AppCompatActivity {
         usernameField = (EditText) findViewById(R.id.usernameLogin); // Initialize EditText for username
         passwordField = (EditText) findViewById(R.id.passwordLogin); // Initialize EditText for password
         errorText = (TextView) findViewById(R.id.errorTextLogin); // Initialize TextView for error messages
+        mAuth = FirebaseAuth.getInstance();
+
 
         login.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -63,10 +67,8 @@ public class LoginActivity extends AppCompatActivity {
                     for (DataSnapshot userSnapshot : dataSnapshot.getChildren()) {
                         Users user = userSnapshot.getValue(Users.class);
                         if (user.getPassword().equals(password)) {
-                            // Passwords match, proceed to next activity
-                            Intent intent = new Intent(LoginActivity.this, FeedActivity.class);
-                            startActivity(intent);
-                            finish(); // Close the LoginActivity
+                            // authenticate use email and password
+                            signInWithFirebase(user.getEmail(),password);
                         } else {
                             // Passwords do not match, show error
                             errorText.setVisibility(View.VISIBLE); // Show error message
@@ -83,5 +85,20 @@ public class LoginActivity extends AppCompatActivity {
                 // Handle possible errors
             }
         });
+    }
+
+    private void signInWithFirebase(String email, String password) {
+        mAuth.signInWithEmailAndPassword(email, password)
+                .addOnCompleteListener(this, task -> {
+                    if (task.isSuccessful()) {
+                        // Sign in success, proceed to next activity
+                        Intent intent = new Intent(LoginActivity.this, FeedActivity.class);
+                        startActivity(intent);
+                        finish(); // Close the LoginActivity
+                    } else {
+                        // If Firebase sign in fails, handle the failure
+                        errorText.setVisibility(View.VISIBLE);
+                    }
+                });
     }
 }

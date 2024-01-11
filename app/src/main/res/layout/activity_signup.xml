@@ -61,13 +61,6 @@
                     android:hint="Username"
                     android:inputType="textEmailAddress" />
 
-                <EditText
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="15dp"
-                    android:ems="10"
-                    android:inputType="textPassword"
-                    android:text="Password" />
 
                 <EditText
                     android:id="@+id/passwordField"
@@ -76,6 +69,15 @@
                     android:layout_margin="15dp"
                     android:hint="Password"
                     android:inputType="textPassword" />
+
+                <EditText
+                    android:id="@+id/user_emailField"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="15dp"
+                    android:ems="10"
+                    android:inputType="text"
+                    android:hint = "Email"/>
 
                 <Button
                     android:id="@+id/signupButtonLogin"

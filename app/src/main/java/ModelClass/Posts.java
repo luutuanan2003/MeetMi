@@ -1,5 +1,7 @@
 package ModelClass;
 
+import java.util.List;
+
 public class Posts {
     private String nickname;
     private String avatar; // Assuming this is a path or URL to an avatar image
@@ -7,14 +9,18 @@ public class Posts {
     private String video; // Optional, could be a path or URL
     private String caption;
     private String dateTime; // Typically, this would be a Date or LocalDateTime object
-    private String location; // Optional
-    private String comments; // Assuming this is aggregated or serialized comments
-    private String reaction; // Default null, could be an enum or string
+    private List<String> comments; // Assuming this is aggregated or serialized comments
+    private int reaction; // Default null, could be an enum or string
 
-    public Posts(String nickname, String caption) {
+    public Posts(String nickname, String avatar, String photo, String video, String caption, String dateTime, List<String> comments, int reaction) {
         this.nickname = nickname;
+        this.avatar = avatar;
+        this.photo = photo;
+        this.video = video;
         this.caption = caption;
-        // Initialize other fields as needed
+        this.dateTime = dateTime;
+        this.comments = comments;
+        this.reaction = reaction;
     }
 
     public String getNickname() {
@@ -64,29 +70,20 @@ public class Posts {
         this.dateTime = dateTime;
     }
 
-    public String getLocation() {
-        return location;
-    }
 
-    public void setLocation(String location) {
-        this.location = location;
-    }
-
-    public String getComments() {
+    public List<String> getComments() {
         return comments;
     }
 
-    public void setComments(String comments) {
+    public void setComments(List<String> comments) {
         this.comments = comments;
     }
 
-    public String getReaction() {
+    public int getReaction() {
         return reaction;
     }
 
-    public void setReaction(String reaction) {
+    public void setReaction(int reaction) {
         this.reaction = reaction;
     }
-
-
 }

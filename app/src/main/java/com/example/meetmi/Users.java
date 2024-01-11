@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 public class Users {
+    private String email;
     private String username;
     private String password;
     private String avatar;
@@ -19,8 +20,9 @@ public class Users {
     public Users() {
         // Default constructor required for Firebase
     }
-    public Users(String username, String password, String avatar, String id, double latitude, double longitude,
-                List<String> friends, String photoFrameId, List<String> newsfeed, String nickname) {
+
+    public Users(String email, String username, String password, String avatar, String id, double latitude, double longitude, List<String> friends, String photoFrameId, List<String> newsfeed, String nickname) {
+        this.email = email;
         this.username = username;
         this.password = password;
         this.avatar = avatar;
@@ -40,6 +42,14 @@ public class Users {
 
     public void setUsername(String username) {
         this.username = username;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public String getPassword() {
