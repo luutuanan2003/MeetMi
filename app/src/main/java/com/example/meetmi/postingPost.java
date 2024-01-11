@@ -6,6 +6,8 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 
 import com.google.firebase.database.DatabaseReference;
@@ -17,10 +19,16 @@ import java.util.List;
 import ModelClass.Posts;
 import ModelClass.UserCallback;
 import ModelClass.UserManager;
+import android.app.AlertDialog;
+
 
 public class postingPost extends AppCompatActivity {
     private static final int PICK_IMAGE_REQUEST = 1;
     private DatabaseReference mDatabase;
+    private EditText CaptionField;
+
+    private Button postButton;
+
 
 
     @Override
@@ -29,7 +37,18 @@ public class postingPost extends AppCompatActivity {
         setContentView(R.layout.activity_posting_post);
 
         mDatabase = FirebaseDatabase.getInstance().getReference();
+        CaptionField = findViewById(R.id.captionField);
+        postButton = findViewById(R.id.postButton);
+
+        postButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                post_toFeed();
+            }
+        });
     }
+
+
 
     public void uploadImage(View view) {
         Intent intent = new Intent(Intent.ACTION_PICK);
@@ -51,7 +70,7 @@ public class postingPost extends AppCompatActivity {
         // Initialize your variables here
         String photo = ""; // Initialize photo
         String video = ""; // Initialize video
-        String caption = ""; // Initialize caption
+        String caption = CaptionField.getText().toString().trim();
         String dateTime = ""; // Initialize dateTime
 
         // Initialize other required fields
@@ -72,12 +91,28 @@ public class postingPost extends AppCompatActivity {
                     // Saving to Firebase
                     mDatabase.child("posts").push().setValue(post);
                 } else {
-                    // Handle the case where the user is not found
-                    // Possibly show an error message or log this event
+                    showUserNotFoundDialog();
+
                 }
             }
         });
+
     }
+    private void showUserNotFoundDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("User Not Found");
+        builder.setMessage("The user you are looking for does not exist.");
+        builder.setPositiveButton("OK", (dialog, id) -> {
+            dialog.dismiss();
+        });
+        builder.setNegativeButton("Cancel", (dialog, id) -> {
+            dialog.dismiss();
+        });
+
+        AlertDialog dialog = builder.create();
+        dialog.show();
+    }
+
 
 
 }
