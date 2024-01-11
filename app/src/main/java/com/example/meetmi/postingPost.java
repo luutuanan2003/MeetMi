@@ -2,6 +2,7 @@ package com.example.meetmi;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -90,6 +91,7 @@ public class postingPost extends AppCompatActivity {
 
                     // Saving to Firebase
                     mDatabase.child("posts").push().setValue(post);
+                    showConfirmationDialog();
                 } else {
                     showUserNotFoundDialog();
 
@@ -113,6 +115,20 @@ public class postingPost extends AppCompatActivity {
         dialog.show();
     }
 
-
+    private void showConfirmationDialog() {
+        androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(this);
+        builder.setMessage("Post has been posted.")
+                .setCancelable(false)
+                .setPositiveButton("Back to Feed", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        // Start the Sign In activity
+                        Intent signInIntent = new Intent(postingPost.this, FeedActivity.class);
+                        startActivity(signInIntent);
+                        finish();
+                    }
+                });
+        androidx.appcompat.app.AlertDialog alert = builder.create();
+        alert.show();
+    }
 
 }

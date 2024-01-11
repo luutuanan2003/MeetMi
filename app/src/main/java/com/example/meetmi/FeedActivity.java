@@ -1,7 +1,9 @@
 package com.example.meetmi;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.DialogInterface;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.content.Intent;
@@ -42,4 +44,6 @@ public class FeedActivity extends AppCompatActivity {
         Intent intent = new Intent(FeedActivity.this,postingPost.class);
         startActivity(intent);
     }
+
+
 }
