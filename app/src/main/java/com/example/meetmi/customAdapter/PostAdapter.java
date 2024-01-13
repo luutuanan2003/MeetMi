@@ -1,5 +1,6 @@
 package com.example.meetmi.customAdapter;
 
+import android.app.AlertDialog;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -71,23 +72,15 @@ public class PostAdapter extends BaseAdapter {
             @Override
             public void onCallback(Users user) {
                 if (user != null) {
-                    // Now that we have the user, we can create and post
-                    String nickname = user.getNickname();
-                    String avatar = user.getAvatar(); // Assuming getAvatar() method exists
-
-                    // Creating post object
-                    Posts post = new Posts(nickname, avatar, photo, video, caption, dateTime, comments, reaction);
-
-                    // Saving to Firebase
-                    mDatabase.child("posts").push().setValue(post);
+                    user = users.get(position);
+                    holder.textView.setText(user.getNickname());
+                    Glide.with(context).load(user.getAvatar()).into(holder.imageView);
                 } else {
-
+                    showUserNotFoundDialog();
                 }
             }
         });
-        Users user = users.get(position);
-        holder.textView.setText(user.getNickname());
-        Glide.with(context).load(user.getAvatar()).into(holder.imageView);
+
 
 
         //TODO: have a post class so that we can call the post and get the information here
@@ -101,5 +94,20 @@ public class PostAdapter extends BaseAdapter {
     static class ViewHolder {
         CircleImageView imageView;
         TextView textView;
+    }
+
+    private void showUserNotFoundDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        builder.setTitle("User Not Found");
+        builder.setMessage("The user you are looking for does not exist.");
+        builder.setPositiveButton("OK", (dialog, id) -> {
+            dialog.dismiss();
+        });
+        builder.setNegativeButton("Cancel", (dialog, id) -> {
+            dialog.dismiss();
+        });
+
+        AlertDialog dialog = builder.create();
+        dialog.show();
     }
 }

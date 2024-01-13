@@ -29,7 +29,7 @@ public class postingPost extends AppCompatActivity {
     private static final int PICK_IMAGE_REQUEST = 1;
     private DatabaseReference mDatabase;
     private EditText CaptionField;
-
+    private Uri selectedImageUri;
     private Button postButton;
 
 
@@ -66,6 +66,7 @@ public class postingPost extends AppCompatActivity {
         if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null && data.getData() != null) {
             // get the image from the device
             Uri imageUri = data.getData();
+            selectedImageUri = data.getData();
             // add of the image url in the list
             List<Uri> imageUrls = new ArrayList<>();
             imageUrls.add(imageUri);
@@ -91,7 +92,7 @@ public class postingPost extends AppCompatActivity {
 
     private void post_toFeed() {
         // Initialize your variables here
-        String photo = ""; // Initialize photo
+        String photo = selectedImageUri != null ? selectedImageUri.toString() : "";
         String video = ""; // Initialize video
         String caption = CaptionField.getText().toString().trim();
         String dateTime = ""; // Initialize dateTime
