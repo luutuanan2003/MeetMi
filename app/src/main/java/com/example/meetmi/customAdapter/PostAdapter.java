@@ -10,9 +10,14 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.example.meetmi.R;
 import com.example.meetmi.Users;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.List;
 
+import ModelClass.Posts;
+import ModelClass.UserCallback;
+import ModelClass.UserManager;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class PostAdapter extends BaseAdapter {
@@ -21,6 +26,7 @@ public class PostAdapter extends BaseAdapter {
     private List<Users> users;
     private LayoutInflater inflater;
     private Context context;
+    private DatabaseReference mDatabase =  FirebaseDatabase.getInstance().getReference() ;
 
     public PostAdapter(Context context, List<Users> users) {
         this.users = users;
@@ -61,6 +67,24 @@ public class PostAdapter extends BaseAdapter {
         } else {
             holder = (ViewHolder) convertView.getTag();
         }
+        UserManager.getCurrentUserDetail(new UserCallback() {
+            @Override
+            public void onCallback(Users user) {
+                if (user != null) {
+                    // Now that we have the user, we can create and post
+                    String nickname = user.getNickname();
+                    String avatar = user.getAvatar(); // Assuming getAvatar() method exists
+
+                    // Creating post object
+                    Posts post = new Posts(nickname, avatar, photo, video, caption, dateTime, comments, reaction);
+
+                    // Saving to Firebase
+                    mDatabase.child("posts").push().setValue(post);
+                } else {
+
+                }
+            }
+        });
         Users user = users.get(position);
         holder.textView.setText(user.getNickname());
         Glide.with(context).load(user.getAvatar()).into(holder.imageView);
