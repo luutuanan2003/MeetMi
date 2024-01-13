@@ -9,8 +9,10 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.GridView;
 import android.widget.ImageView;
 
+import com.example.meetmi.customAdapter.GalleryAdapter;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -57,15 +59,35 @@ public class postingPost extends AppCompatActivity {
         startActivityForResult(intent, PICK_IMAGE_REQUEST);
     }
 
+    // what is the difference between url and uri wtf?
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null && data.getData() != null) {
+            // get the image from the device
             Uri imageUri = data.getData();
-            ImageView photoView = findViewById(R.id.photoView);
-            photoView.setImageURI(imageUri);
+            // add of the image url in the list
+            List<Uri> imageUrls = new ArrayList<>();
+            imageUrls.add(imageUri);
+
+            GridView galleryGridView = findViewById(R.id.gallery_posting);
+
+            // pass the image uri into the adapter and then use that adapter to bring the image into the gridview
+            GalleryAdapter GalleryAdapter = new GalleryAdapter(this, imageUrls);
+            galleryGridView.setAdapter(GalleryAdapter);
         }
     }
+
+//    old code for getting image from the device and put to the app
+//    @Override
+//    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+//        super.onActivityResult(requestCode, resultCode, data);
+//        if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null && data.getData() != null) {
+//            Uri imageUri = data.getData();
+//            ImageView photoView = findViewById(R.id.photoView);
+//            photoView.setImageURI(imageUri);
+//        }
+//    }
 
     private void post_toFeed() {
         // Initialize your variables here
