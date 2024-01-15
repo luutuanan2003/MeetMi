@@ -24,6 +24,7 @@
             android:label="@string/title_activity_notification"
             android:theme="@style/Theme.MeetMi" />
         <activity
+            android:theme="@style/Theme.MeetMi"
             android:name=".SignupActivity"
             android:exported="false" />
         <activity

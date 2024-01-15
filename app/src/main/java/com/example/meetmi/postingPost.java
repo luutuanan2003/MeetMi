@@ -1,6 +1,8 @@
 package com.example.meetmi;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -23,6 +25,7 @@ import ModelClass.Posts;
 import ModelClass.UserCallback;
 import ModelClass.UserManager;
 import android.app.AlertDialog;
+import android.widget.ListView;
 
 
 public class postingPost extends AppCompatActivity {
@@ -31,8 +34,8 @@ public class postingPost extends AppCompatActivity {
     private EditText CaptionField;
     private Uri selectedImageUri;
     private Button postButton;
-
-
+    private GalleryAdapter galleryAdapter;
+    private List<Uri> imageUrls = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,7 +62,6 @@ public class postingPost extends AppCompatActivity {
         startActivityForResult(intent, PICK_IMAGE_REQUEST);
     }
 
-    // what is the difference between url and uri wtf?
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -71,13 +73,19 @@ public class postingPost extends AppCompatActivity {
             List<Uri> imageUrls = new ArrayList<>();
             imageUrls.add(imageUri);
 
-            GridView galleryGridView = findViewById(R.id.gallery_posting);
+            ListView galleryGridView = findViewById(R.id.gallery_posting);
 
-            // pass the image uri into the adapter and then use that adapter to bring the image into the gridview
-            GalleryAdapter GalleryAdapter = new GalleryAdapter(this, imageUrls);
-            galleryGridView.setAdapter(GalleryAdapter);
+            // pass the image uri into the adapter and
+            // then use that adapter to bring the image into the gridview
+            for (int i = 0; i < imageUrls.size(); i += 2) {
+                Uri currentUri = imageUrls.get(i);
+                // Process currentUri here
+                GalleryAdapter GalleryAdapter = new GalleryAdapter(this, imageUrls);
+                galleryGridView.setAdapter(GalleryAdapter);
+            }
         }
     }
+
 
 //    old code for getting image from the device and put to the app
 //    @Override
