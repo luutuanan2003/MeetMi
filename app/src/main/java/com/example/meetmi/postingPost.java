@@ -115,24 +115,54 @@ public class postingPost extends AppCompatActivity {
     public void uploadImage(View view) {
         Intent intent = new Intent(Intent.ACTION_PICK);
         intent.setType("image/*");
-        startActivityForResult(intent, PICK_IMAGE_REQUEST);
+        intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true); // Allow multiple selections
+        startActivityForResult(Intent.createChooser(intent, "Select Picture"), PICK_IMAGE_REQUEST);
     }
 
-    @Override
+//    on activity cu
+//    @Override
+//    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+//        super.onActivityResult(requestCode, resultCode, data);
+//        if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null && data.getData() != null) {
+//            selectedImageUri = data.getData();
+//            imageUrls.add(selectedImageUri);
+//
+//            RecyclerView galleryRecyclerView = findViewById(R.id.gallery_recycler_view);
+//
+//            LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
+//            galleryRecyclerView.setLayoutManager(layoutManager);
+//
+//            GalleryAdapter galleryAdapter = new GalleryAdapter(this, imageUrls);
+//            galleryRecyclerView.setAdapter(galleryAdapter);
+//        }
+//    }
+
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null && data.getData() != null) {
-            selectedImageUri = data.getData();
-            imageUrls.add(selectedImageUri);
+        if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK) {
+            if (data.getClipData() != null) {
+                // Multiple images selected
+                int count = data.getClipData().getItemCount();
+                for (int i = 0; i < count; i++) {
+                    Uri imageUri = data.getClipData().getItemAt(i).getUri();
+                    imageUrls.add(imageUri);
+                }
+            } else if (data.getData() != null) {
+                // Single image selected
+                Uri imageUri = data.getData();
+                imageUrls.add(imageUri);
+            }
 
-            RecyclerView galleryRecyclerView = findViewById(R.id.gallery_recycler_view);
-
-            LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
-            galleryRecyclerView.setLayoutManager(layoutManager);
-
-            GalleryAdapter galleryAdapter = new GalleryAdapter(this, imageUrls);
-            galleryRecyclerView.setAdapter(galleryAdapter);
+            updateGalleryRecyclerView();
         }
+    }
+
+    private void updateGalleryRecyclerView() {
+        RecyclerView galleryRecyclerView = findViewById(R.id.gallery_recycler_view);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
+        galleryRecyclerView.setLayoutManager(layoutManager);
+        GalleryAdapter galleryAdapter = new GalleryAdapter(this, imageUrls);
+        galleryRecyclerView.setAdapter(galleryAdapter);
     }
 
 //    @Override
@@ -167,7 +197,10 @@ public class postingPost extends AppCompatActivity {
 
     private void post_toFeed() {
         // Initialize your variables here
-        String photo = selectedImageUri != null ? selectedImageUri.toString() : "";
+        List<String> photoUrls = new ArrayList<>();
+        for (Uri uri : imageUrls) {
+            photoUrls.add(uri.toString());
+        }
         String video = ""; // Initialize video
         String caption = CaptionField.getText().toString().trim();
         String dateTime = ""; // Initialize dateTime
@@ -185,7 +218,7 @@ public class postingPost extends AppCompatActivity {
                     String avatar = user.getAvatar(); // Assuming getAvatar() method exists
 
                     // Creating post object
-                    Posts post = new Posts(nickname, avatar, photo, video, caption, dateTime, comments, reaction);
+                    Posts post = new Posts(nickname, avatar, photoUrls, video, caption, dateTime, comments, reaction);
 
                     // Saving to Firebase
                     mDatabase.child("posts").push().setValue(post);

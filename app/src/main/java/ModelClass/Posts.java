@@ -5,14 +5,14 @@ import java.util.List;
 public class Posts {
     private String nickname;
     private String avatar; // Assuming this is a path or URL to an avatar image
-    private String photo;
+    private List <String> photo;
     private String video; // Optional, could be a path or URL
     private String caption;
     private String dateTime; // Typically, this would be a Date or LocalDateTime object
     private List<String> comments; // Assuming this is aggregated or serialized comments
     private int reaction; // Default null, could be an enum or string
 
-    public Posts(String nickname, String avatar, String photo, String video, String caption, String dateTime, List<String> comments, int reaction) {
+    public Posts(String nickname, String avatar, List<String> photo, String video, String caption, String dateTime, List<String> comments, int reaction) {
         this.nickname = nickname;
         this.avatar = avatar;
         this.photo = photo;
@@ -39,11 +39,11 @@ public class Posts {
         this.avatar = avatar;
     }
 
-    public String getPhoto() {
+    public List<String> getPhoto() {
         return photo;
     }
 
-    public void setPhoto(String photo) {
+    public void setPhoto(List<String> photo) {
         this.photo = photo;
     }
 

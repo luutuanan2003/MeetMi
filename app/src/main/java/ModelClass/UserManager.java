@@ -1,5 +1,7 @@
 package ModelClass;
 
+import android.util.Log;
+
 import androidx.annotation.NonNull;
 
 import com.example.meetmi.Users;
@@ -34,9 +36,13 @@ public class UserManager {
                     if (dataSnapshot.exists()) {
                         for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                             Users user = snapshot.getValue(Users.class);
+
                             userCallback.onCallback(user);
                             break; // assuming email is unique and you want the first match
                         }
+                    }
+                    else {
+                        Log.d("FirebaseCheck", "No data found for the user");
                     }
                 }
 
