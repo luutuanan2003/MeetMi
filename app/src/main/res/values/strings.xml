@@ -45,4 +45,7 @@
     </string>
     <string name="title_activity_noti">NotiActivity</string>
     <string name="title_activity_main">MainActivity</string>
+    <string name="title_activity_dummy">dummy</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

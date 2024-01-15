@@ -37,6 +37,8 @@ public class LoginActivity extends AppCompatActivity {
         errorText = (TextView) findViewById(R.id.errorTextLogin); // Initialize TextView for error messages
         mAuth = FirebaseAuth.getInstance();
 
+        // set default setting for the login screen
+        setVisible(R.id.errorTextLogin, false);
 
         login.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -71,12 +73,12 @@ public class LoginActivity extends AppCompatActivity {
                             signInWithFirebase(user.getEmail(),password);
                         } else {
                             // Passwords do not match, show error
-                            errorText.setVisibility(View.VISIBLE); // Show error message
+                            setVisible(R.id.errorTextLogin, true);
                         }
                     }
                 } else {
                     // Username not found, show error
-                    errorText.setVisibility(View.VISIBLE); // Show error message
+                    setVisible(R.id.errorTextLogin, true);
                 }
             }
 
@@ -97,8 +99,18 @@ public class LoginActivity extends AppCompatActivity {
                         finish(); // Close the LoginActivity
                     } else {
                         // If Firebase sign in fails, handle the failure
+                        // TODO: have an error message when firebase not connected
                         errorText.setVisibility(View.VISIBLE);
                     }
                 });
     }
+
+    private void setVisible(int id, boolean isVisible){
+        View aView = findViewById(id);
+        if (isVisible)
+            aView.setVisibility(View.VISIBLE);
+        else
+            aView.setVisibility(View.INVISIBLE);
+    }
 }
+

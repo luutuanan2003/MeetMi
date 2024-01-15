@@ -45,48 +45,76 @@
                     android:padding="30dp"
                     android:src="@drawable/avatar" />
 
-                <TextView
+                <LinearLayout
+                    android:id="@+id/signup_container"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="@font/asap"
-                    android:gravity="center"
-                    android:text="Create your account"
-                    android:textSize="25dp" />
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
 
-                <EditText
-                    android:id="@+id/usernameField"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="15dp"
-                    android:hint="Username"
-                    android:inputType="textEmailAddress" />
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/asap"
+                        android:gravity="center"
+                        android:text="Create your account"
+                        android:textSize="25dp" />
 
 
-                <EditText
-                    android:id="@+id/passwordField"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="15dp"
-                    android:hint="Password"
-                    android:inputType="textPassword" />
+                    <EditText
+                        android:id="@+id/usernameField"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="15dp"
+                        android:hint="Username"
+                        android:inputType="textEmailAddress" />
 
-                <EditText
-                    android:id="@+id/user_emailField"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="15dp"
-                    android:ems="10"
-                    android:inputType="text"
-                    android:hint = "Email"/>
 
-                <Button
-                    android:id="@+id/signupButtonLogin"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_horizontal"
-                    android:layout_marginTop="10dp"
-                    android:background="@drawable/bg_button"
-                    android:text="Sign Up" />
+                    <EditText
+                        android:id="@+id/passwordField"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="15dp"
+                        android:hint="Password"
+                        android:inputType="textPassword" />
+
+                    <EditText
+                        android:id="@+id/repasswordField"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="15dp"
+                        android:hint="Re-enter your password"
+                        android:inputType="textEmailAddress" />
+
+                    <EditText
+                        android:id="@+id/user_emailField"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="15dp"
+                        android:ems="10"
+                        android:hint="Email"
+                        android:inputType="text" />
+
+                    <TextView
+                        android:id="@+id/errorTextSignup"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="15dp"
+                        android:fontFamily="sans-serif-medium"
+                        android:gravity="center"
+                        android:text="Your password does not match"
+                        android:textColor="#FF0000" />
+
+                    <Button
+                        android:id="@+id/signupButtonLogin"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_marginTop="10dp"
+                        android:background="@drawable/bg_button"
+                        android:text="Sign Up" />
+                </LinearLayout>
+
+
             </LinearLayout>
         </androidx.cardview.widget.CardView>
     </androidx.cardview.widget.CardView>

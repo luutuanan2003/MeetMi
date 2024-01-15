@@ -7,9 +7,14 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
+
 
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
@@ -19,8 +24,7 @@ import java.util.List;
 
 public class SignupActivity extends AppCompatActivity {
 
-    private EditText usernameField, passwordField, emailField;
-    // Add other relevant fields if needed
+    private EditText usernameField, passwordField, re_enter_passwordField, emailField;
     private Button signupButton;
     private DatabaseReference mDatabase;
 
@@ -36,21 +40,39 @@ public class SignupActivity extends AppCompatActivity {
         // Initialize fields
         usernameField = findViewById(R.id.usernameField);
         passwordField = findViewById(R.id.passwordField);
+        re_enter_passwordField = findViewById(R.id.repasswordField);
         signupButton = findViewById(R.id.signupButtonLogin);
         emailField = findViewById(R.id.user_emailField);
+        setVisible(R.id.errorTextSignup,false);
+
+
+
 
         signupButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                registerUser();
+                validatePassword();
             }
         });
+    }
+
+
+    // Method for validate the correct password input before running the main method "registerUser"
+    private void validatePassword(){
+        String password = passwordField.getText().toString().trim();
+        String re_enter_password = re_enter_passwordField.getText().toString().trim();
+        if(!password.equals(re_enter_password)){
+            setVisible(R.id.errorTextSignup,true);
+        } else {
+            registerUser();
+        }
     }
 
     private void registerUser() {
         String email = emailField.getText().toString().trim();
         String username = usernameField.getText().toString().trim();
         String password = passwordField.getText().toString().trim();
+
 
         // Validation here for input values
 
@@ -87,5 +109,21 @@ public class SignupActivity extends AppCompatActivity {
                 });
         AlertDialog alert = builder.create();
         alert.show();
+    }
+
+    // Helper method to replace fragments
+    private void displayFragment(Fragment fragment) {
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        transaction.replace(R.id.signup_container, fragment);
+        transaction.addToBackStack(null);
+        transaction.commit();
+    }
+
+    private void setVisible(int id, boolean isVisible){
+        View aView = findViewById(id);
+        if (isVisible)
+            aView.setVisibility(View.VISIBLE);
+        else
+            aView.setVisibility(View.INVISIBLE);
     }
 }

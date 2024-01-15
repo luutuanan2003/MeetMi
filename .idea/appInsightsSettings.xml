@@ -1,10 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="AppInsightsSettings">
-<<<<<<< HEAD
     <option name="selectedTabId" value="Firebase Crashlytics" />
-=======
-    <option name="selectedTabId" value="Android Vitals" />
->>>>>>> 70f434734c2c06c7a76f38b33b3e24d50cdf795d
+    <option name="tabSettings">
+      <map>
+        <entry key="Firebase Crashlytics">
+          <value>
+            <InsightsFilterSettings>
+              <option name="connection">
+                <ConnectionSetting>
+                  <option name="appId" value="com.example.meetmi" />
+                  <option name="mobileSdkAppId" value="1:675313393894:android:7ad8afb109626f7fc25b27" />
+                  <option name="projectId" value="meetmi-5cd8e" />
+                  <option name="projectNumber" value="675313393894" />
+                </ConnectionSetting>
+              </option>
+              <option name="signal" value="SIGNAL_UNSPECIFIED" />
+              <option name="timeIntervalDays" value="THIRTY_DAYS" />
+              <option name="visibilityType" value="ALL" />
+            </InsightsFilterSettings>
+          </value>
+        </entry>
+      </map>
+    </option>
   </component>
 </project>
