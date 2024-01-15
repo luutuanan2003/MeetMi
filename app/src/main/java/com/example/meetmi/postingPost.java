@@ -8,6 +8,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -33,18 +34,24 @@ public class postingPost extends AppCompatActivity {
     private DatabaseReference mDatabase;
     private EditText CaptionField;
     private Uri selectedImageUri;
-    private Button postButton;
-    private GalleryAdapter galleryAdapter;
     private List<Uri> imageUrls = new ArrayList<>();
+
+    private Button postButton;
+    private RecyclerView galleryRecyclerView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_posting_post);
 
+        Log.d("red", "hehehehehehe");
+
+
         mDatabase = FirebaseDatabase.getInstance().getReference();
         CaptionField = findViewById(R.id.captionField);
         postButton = findViewById(R.id.postButton);
+//        galleryRecyclerView = findViewById(R.id.gallery_recycler_view);
+//        galleryRecyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
 
         postButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -66,25 +73,36 @@ public class postingPost extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null && data.getData() != null) {
-            // get the image from the device
-            Uri imageUri = data.getData();
             selectedImageUri = data.getData();
-            // add of the image url in the list
-            List<Uri> imageUrls = new ArrayList<>();
-            imageUrls.add(imageUri);
+            imageUrls.add(selectedImageUri);
 
-            ListView galleryGridView = findViewById(R.id.gallery_posting);
+            RecyclerView galleryRecyclerView = findViewById(R.id.gallery_recycler_view);
 
-            // pass the image uri into the adapter and
-            // then use that adapter to bring the image into the gridview
-            for (int i = 0; i < imageUrls.size(); i += 2) {
-                Uri currentUri = imageUrls.get(i);
-                // Process currentUri here
-                GalleryAdapter GalleryAdapter = new GalleryAdapter(this, imageUrls);
-                galleryGridView.setAdapter(GalleryAdapter);
-            }
+            LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
+            galleryRecyclerView.setLayoutManager(layoutManager);
+
+            GalleryAdapter galleryAdapter = new GalleryAdapter(this, imageUrls);
+            galleryRecyclerView.setAdapter(galleryAdapter);
         }
     }
+
+//    @Override
+//    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+//        super.onActivityResult(requestCode, resultCode, data);
+//        if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null && data.getData() != null) {
+//            // get the image from the device
+//            selectedImageUri = data.getData();
+//            // add of the image url in the list
+//            imageUrls.add(selectedImageUri);
+//
+//            ListView galleryView = findViewById(R.id.gallery_posting);
+//
+//            // pass the image uri into the adapter and
+//            // then use that adapter to bring the image into the listview
+//            GalleryAdapter galleryAdapter = new GalleryAdapter(this, imageUrls);
+//            galleryView.setAdapter(galleryAdapter);
+//        }
+//    }
 
 
 //    old code for getting image from the device and put to the app

@@ -40,15 +40,27 @@ public class LoginActivity extends AppCompatActivity {
         // set default setting for the login screen
         setVisible(R.id.errorTextLogin, false);
 
+
+        // this login feature is only to take to the newsfeed immediately with no
+        // authentication
         login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String enteredUsername = usernameField.getText().toString();
-                String enteredPassword = passwordField.getText().toString();
-                // Perform authentication
-                authenticateUser(enteredUsername, enteredPassword);
+                Intent intent = new Intent(LoginActivity.this, FeedActivity.class);
+                startActivity(intent);
+                finish();
             }
         });
+
+//        login.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                String enteredUsername = usernameField.getText().toString();
+//                String enteredPassword = passwordField.getText().toString();
+//                // Perform authentication
+//                authenticateUser(enteredUsername, enteredPassword);
+//            }
+//        });
 
         signupButton.setOnClickListener(new View.OnClickListener() {
             @Override

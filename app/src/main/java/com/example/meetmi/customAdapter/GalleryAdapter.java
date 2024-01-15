@@ -2,55 +2,105 @@ package com.example.meetmi.customAdapter;
 
 import android.content.Context;
 import android.net.Uri;
+import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.BaseAdapter;
 import android.widget.GridView;
 import android.widget.ImageView;
 
+
 import com.bumptech.glide.Glide;
+import com.example.meetmi.R;
 
 import java.util.List;
 
-public class GalleryAdapter extends BaseAdapter {
+
+import android.widget.BaseAdapter;
+
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
+
+
+//public class GalleryAdapter extends BaseAdapter {
+//    private Context context;
+//    private List<Uri> imageUrls;
+//
+//    public GalleryAdapter(Context context, List<Uri> imageUrls) {
+//        this.context = context;
+//        this.imageUrls = imageUrls;
+//    }
+//
+//    @Override
+//    public int getCount() {
+//        return imageUrls.size();
+//    }
+//
+//    @Override
+//    public Object getItem(int position) {
+//        return imageUrls.get(position);
+//    }
+//
+//    @Override
+//    public long getItemId(int position) {
+//        return position;
+//    }
+//
+//    @Override
+//    public View getView(int position, View convertView, ViewGroup parent) {
+//        if (convertView == null) {
+//            convertView = LayoutInflater.from(context).inflate(R.layout.item_image, parent, false);
+//        }
+//
+//        ImageView imageView = convertView.findViewById(R.id.imageView);
+//        Uri imageUri = imageUrls.get(position);
+//
+//        Glide.with(context)
+//                .load(imageUri)
+//                .fitCenter() // Optional if scaleType is set in XML
+//                .into(imageView);
+//
+//        return convertView;
+//    }
+//
+//}
+
+// old code for the recycler view
+public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.ViewHolder> {
     private Context context;
-    private List<Uri> imageUrls; // Assuming image URLs. Change to int[] if you have resource IDs.
+    private List<Uri> imageUrls;
 
     public GalleryAdapter(Context context, List<Uri> imageUrls) {
         this.context = context;
         this.imageUrls = imageUrls;
     }
 
+    @NonNull
     @Override
-    public int getCount() {
+    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        View view = LayoutInflater.from(context).inflate(R.layout.item_image, parent, false);
+        return new ViewHolder(view);
+    }
+
+    @Override
+    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+        Glide.with(context)
+                .load(imageUrls.get(position))
+                .fitCenter()
+                .into(holder.imageView);
+    }
+
+    @Override
+    public int getItemCount() {
         return imageUrls.size();
     }
 
-    @Override
-    public Object getItem(int position) {
-        return imageUrls.get(position);
-    }
-
-    @Override
-    public long getItemId(int position) {
-        return position;
-    }
-
-    @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public static class ViewHolder extends RecyclerView.ViewHolder {
         ImageView imageView;
-        if (convertView == null) {
-            imageView = new ImageView(context);
-            imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
-            imageView.setLayoutParams(new GridView.LayoutParams(GridView.AUTO_FIT, 200)); // Set your dimensions
-        } else {
-            imageView = (ImageView) convertView;
-        }
-        Glide.with(context)
-                .load(imageUrls.get(position))
-                .into(imageView);
 
-        return imageView;
+        public ViewHolder(View itemView) {
+            super(itemView);
+            imageView = itemView.findViewById(R.id.imageView);
+        }
     }
 }
-
