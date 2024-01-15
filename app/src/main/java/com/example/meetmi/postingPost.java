@@ -63,19 +63,27 @@ public class postingPost extends AppCompatActivity {
             @Override
             public void onCallback(Users user) {
                 if (user != null) {
-                    // Now that we have the user, we can create and post
                     String nickname = user.getNickname();
-                    String avatar = user.getAvatar(); // Assuming getAvatar() method exists
+                    String avatar = user.getAvatar().toString(); // This retrieves the avatar URL from Firebase
                     user_Nickname.setText(nickname);
-                    Picasso.get()
-                            .load(avatar)
-                            .into(user_Avatar);
+
+                    // Check if the avatar URL is not null and not empty
+                    if (avatar != null && !avatar.isEmpty()) {
+                        Picasso.get()
+                                .load(avatar)
+                                .into(user_Avatar);
+                    } else {
+                        // Load a default image if the avatar URL is null or empty
+                        Picasso.get()
+                                .load(R.drawable.sampleavatar) // Replace with your default avatar drawable
+                                .into(user_Avatar);
+                    }
                 } else {
                     showUserNotFoundDialog();
-
                 }
             }
         });
+
 
 //        galleryRecyclerView = findViewById(R.id.gallery_recycler_view);
 //        galleryRecyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
