@@ -41,8 +41,9 @@ public class postingPost extends AppCompatActivity {
     private List<Uri> imageUrls = new ArrayList<>();
     private CircleImageView user_Avatar;
     private TextView user_Nickname;
-    private Button postButton;
+    private Button postButton,backButton;
     private RecyclerView galleryRecyclerView;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,6 +56,7 @@ public class postingPost extends AppCompatActivity {
         mDatabase = FirebaseDatabase.getInstance().getReference();
         CaptionField = findViewById(R.id.captionField);
         postButton = findViewById(R.id.postButton);
+        backButton  = findViewById(R.id.back_to_mainPP);
 
         //load user nickname + avatar
         user_Avatar = findViewById(R.id.userAvatar_postingPost);
@@ -64,8 +66,9 @@ public class postingPost extends AppCompatActivity {
             public void onCallback(Users user) {
                 if (user != null) {
                     String nickname = user.getNickname();
-                    String avatar = user.getAvatar(); // This retrieves the avatar URL from Firebase
+                    String avatar = user.getAvatar().toString(); // This retrieves the avatar URL from Firebase
                     user_Nickname.setText(nickname);
+                    Log.d("FirebaseDebug", "User Retrieved: " + user.getNickname());
 
                     // Check if the avatar URL is not null and not empty
                     if (avatar != null && !avatar.isEmpty()) {
@@ -88,15 +91,26 @@ public class postingPost extends AppCompatActivity {
 //        galleryRecyclerView = findViewById(R.id.gallery_recycler_view);
 //        galleryRecyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
 
+        postButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                post_toFeed();
+            }
+        });
 
+        backButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(postingPost.this ,FeedActivity.class);
+                startActivity(intent);
+                finish();
+            }
+        });
     }
 
 
-    public void post_toFeed(View view) {
-        Intent intent = new Intent(postingPost.this,FeedActivity.class);
-        startActivity(intent);
 
-    }
+
 
     public void uploadImage(View view) {
         Intent intent = new Intent(Intent.ACTION_PICK);

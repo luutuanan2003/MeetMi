@@ -32,7 +32,7 @@ public class SignupActivity extends AppCompatActivity {
 
     //TODO: need to collect data from the nickname field and the button for the avatar as well
 
-    private EditText usernameField, passwordField, re_enter_passwordField, emailField;
+    private EditText usernameField, passwordField, re_enter_passwordField, emailField, nickNameField;
     private Button signupButton;
     private DatabaseReference mDatabase;
 
@@ -46,7 +46,8 @@ public class SignupActivity extends AppCompatActivity {
         mDatabase = FirebaseDatabase.getInstance().getReference();
 
         // Initialize fields
-        usernameField = findViewById(R.id.usernameField);
+        nickNameField = findViewById(R.id.nicknameField_SU);
+        usernameField = findViewById(R.id.usernameField_SU);
         passwordField = findViewById(R.id.passwordField);
         re_enter_passwordField = findViewById(R.id.repasswordField);
         signupButton = findViewById(R.id.signupButtonLogin);
@@ -80,7 +81,7 @@ public class SignupActivity extends AppCompatActivity {
         String email = emailField.getText().toString().trim();
         String username = usernameField.getText().toString().trim();
         String password = passwordField.getText().toString().trim();
-
+        String nickname = nickNameField.getText().toString().trim();
 
         // Validation here for input values
 
@@ -92,7 +93,7 @@ public class SignupActivity extends AppCompatActivity {
         List<String> friends = new ArrayList<>(); // empty list
         String photoFrameId = ""; // default or empty
         List<String> newsfeed = new ArrayList<>(); // empty list
-        String nickname = ""; // default or empty
+
 
         // Creating user object
         Users user = new Users(email,username, password, avatar, id, latitude, longitude,
