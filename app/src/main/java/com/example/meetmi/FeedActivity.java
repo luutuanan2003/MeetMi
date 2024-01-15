@@ -43,6 +43,7 @@ public class FeedActivity extends AppCompatActivity {
     public void goto_postingPost(View view) {
         Intent intent = new Intent(FeedActivity.this,postingPost.class);
         startActivity(intent);
+        finish();
     }
 
 

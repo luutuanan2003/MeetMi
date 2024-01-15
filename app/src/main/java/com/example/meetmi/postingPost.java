@@ -64,7 +64,7 @@ public class postingPost extends AppCompatActivity {
             public void onCallback(Users user) {
                 if (user != null) {
                     String nickname = user.getNickname();
-                    String avatar = user.getAvatar().toString(); // This retrieves the avatar URL from Firebase
+                    String avatar = user.getAvatar(); // This retrieves the avatar URL from Firebase
                     user_Nickname.setText(nickname);
 
                     // Check if the avatar URL is not null and not empty
@@ -88,15 +88,15 @@ public class postingPost extends AppCompatActivity {
 //        galleryRecyclerView = findViewById(R.id.gallery_recycler_view);
 //        galleryRecyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
 
-        postButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                post_toFeed();
-            }
-        });
+
     }
 
 
+    public void post_toFeed(View view) {
+        Intent intent = new Intent(postingPost.this,FeedActivity.class);
+        startActivity(intent);
+
+    }
 
     public void uploadImage(View view) {
         Intent intent = new Intent(Intent.ACTION_PICK);
