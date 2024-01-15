@@ -18,6 +18,7 @@ import android.widget.ImageView;
 import com.example.meetmi.customAdapter.GalleryAdapter;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -66,6 +67,9 @@ public class postingPost extends AppCompatActivity {
                     String nickname = user.getNickname();
                     String avatar = user.getAvatar(); // Assuming getAvatar() method exists
                     user_Nickname.setText(nickname);
+                    Picasso.get()
+                            .load(avatar)
+                            .into(user_Avatar);
                 } else {
                     showUserNotFoundDialog();
 
