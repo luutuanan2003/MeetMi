@@ -25,8 +25,11 @@ import java.util.List;
 import ModelClass.Posts;
 import ModelClass.UserCallback;
 import ModelClass.UserManager;
+import de.hdodenhof.circleimageview.CircleImageView;
+
 import android.app.AlertDialog;
 import android.widget.ListView;
+import android.widget.TextView;
 
 
 public class postingPost extends AppCompatActivity {
@@ -35,7 +38,8 @@ public class postingPost extends AppCompatActivity {
     private EditText CaptionField;
     private Uri selectedImageUri;
     private List<Uri> imageUrls = new ArrayList<>();
-
+    private CircleImageView user_Avatar;
+    private TextView user_Nickname;
     private Button postButton;
     private RecyclerView galleryRecyclerView;
 
@@ -50,6 +54,25 @@ public class postingPost extends AppCompatActivity {
         mDatabase = FirebaseDatabase.getInstance().getReference();
         CaptionField = findViewById(R.id.captionField);
         postButton = findViewById(R.id.postButton);
+
+        //load user nickname + avatar
+        user_Avatar = findViewById(R.id.userAvatar_postingPost);
+        user_Nickname = findViewById(R.id.nickName_postingPost);
+        UserManager.getCurrentUserDetail(new UserCallback() {
+            @Override
+            public void onCallback(Users user) {
+                if (user != null) {
+                    // Now that we have the user, we can create and post
+                    String nickname = user.getNickname();
+                    String avatar = user.getAvatar(); // Assuming getAvatar() method exists
+                    user_Nickname.setText(nickname);
+                } else {
+                    showUserNotFoundDialog();
+
+                }
+            }
+        });
+
 //        galleryRecyclerView = findViewById(R.id.gallery_recycler_view);
 //        galleryRecyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
 

@@ -73,13 +73,13 @@
                     android:orientation="horizontal">
 
                     <de.hdodenhof.circleimageview.CircleImageView
-                        android:id="@+id/userAvatar_notification"
+                        android:id="@+id/userAvatar_postingPost"
                         android:layout_width="40dp"
                         android:layout_height="40dp"
                         android:src="@drawable/ic_launcher_background"></de.hdodenhof.circleimageview.CircleImageView>
 
                     <TextView
-                        android:id="@+id/userName_notification"
+                        android:id="@+id/nickName_postingPost"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="10dp"
