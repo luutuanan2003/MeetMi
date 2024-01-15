@@ -20,6 +20,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.squareup.picasso.Picasso;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -203,7 +205,9 @@ public class postingPost extends AppCompatActivity {
         }
         String video = ""; // Initialize video
         String caption = CaptionField.getText().toString().trim();
-        String dateTime = ""; // Initialize dateTime
+        LocalDateTime now = LocalDateTime.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        String dateTime = now.format(formatter);
 
         // Initialize other required fields
         List<String> comments = new ArrayList<>();
