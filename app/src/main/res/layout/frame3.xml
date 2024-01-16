@@ -11,7 +11,7 @@
         android:layout_height="match_parent"
         android:layout_gravity="center"
         android:layout_margin="5dp"
-        app:cardBackgroundColor="#E4D6A7"
+        app:cardBackgroundColor="#03A9F4"
         app:cardCornerRadius="10dp">
 
         <LinearLayout
@@ -24,10 +24,12 @@
                 android:layout_height="200dp"
                 android:orientation="vertical">
 
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/userImage_post"
+                <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent" />
+                    android:layout_height="match_parent"
+                    android:layout_margin="15dp"
+                    android:background="#FFFFFF"
+                    android:orientation="vertical"></LinearLayout>
             </LinearLayout>
 
             <LinearLayout
@@ -49,17 +51,9 @@
                         android:layout_gravity="center"
                         android:padding="5dp"
                         android:scaleType="centerCrop"
-                        android:src="@drawable/sampleavatar"
                         app:shapeAppearanceOverlay="@style/CircularImageView"
                         app:strokeColor="@color/white"
                         app:strokeWidth="2dp" />
-
-                    <TextView
-                        android:id="@+id/dateTimeTextView"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="datetime" />
 
                     <TextView
                         android:id="@+id/username_post"

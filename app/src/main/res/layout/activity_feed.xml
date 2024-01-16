@@ -27,9 +27,13 @@
       android:background="#1F1F1F"
       android:orientation="vertical">
 
-    <ListView
+    <!-- Add this inside your LinearLayout in activity_feed.xml -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/postsRecyclerView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:layout_marginTop="8dp"/>
+
   </LinearLayout>
 
   <LinearLayout
