@@ -1,5 +1,6 @@
 package com.example.meetmi;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
@@ -54,6 +55,8 @@ public class ProfileActivity extends AppCompatActivity {
         else
             aView.setVisibility(View.INVISIBLE);
     }
+
+
 }
 
 

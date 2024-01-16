@@ -76,4 +76,11 @@ public class FeedActivity extends AppCompatActivity {
     }
 
 
+    public void goto_profile(View view) {
+        Intent intent = new Intent(FeedActivity.this,ProfileActivity.class);
+        startActivity(intent);
+        finish();
+    }
+
+
 }

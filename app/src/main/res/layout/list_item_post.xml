@@ -24,10 +24,16 @@
                 android:layout_height="200dp"
                 android:orientation="vertical">
 
-                <androidx.recyclerview.widget.RecyclerView
+                <ImageView
                     android:id="@+id/userImage_post"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent" />
+                    android:layout_height="200dp"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_marginBottom="5dp"
+                    app:srcCompat="@drawable/samplepic" />
             </LinearLayout>
 
             <LinearLayout
