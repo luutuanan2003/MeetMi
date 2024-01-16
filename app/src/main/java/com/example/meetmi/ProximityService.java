@@ -1,63 +1,113 @@
 package com.example.meetmi;
-
+import android.app.Notification;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.app.Service;
-import android.bluetooth.BluetoothAdapter;
-import android.bluetooth.BluetoothManager;
 import android.content.Context;
 import android.content.Intent;
 import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
+import android.os.Build;
 import android.os.IBinder;
 import android.util.Log;
 import android.widget.Toast;
+
+import androidx.core.app.NotificationCompat;
+
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 public class ProximityService extends Service {
 
     private static final String TAG = "ProximityService";
-    private BluetoothAdapter bluetoothAdapter;
-    // Firebase database reference
     private DatabaseReference databaseReference;
+    private LocationManager locationManager;
+    private LocationListener locationListener;
 
     @Override
     public void onCreate() {
         super.onCreate();
         Log.d(TAG, "Service Created");
 
-        // Initialize Bluetooth
-        final BluetoothManager bluetoothManager = (BluetoothManager) getSystemService(Context.BLUETOOTH_SERVICE);
-        bluetoothAdapter = bluetoothManager.getAdapter();
-
-        // Initialize Firebase
         databaseReference = FirebaseDatabase.getInstance().getReference();
 
-        // TODO: Initialize location services
+        locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        locationListener = new LocationListener() {
+            @Override
+            public void onLocationChanged(Location location) {
+                updateFirebaseData(location);
+                checkForNearbyUsers(location);
+            }
 
-        // Start Bluetooth scanning
-        startBluetoothScanning();
+            // Implement other LocationListener methods as necessary
+        };
 
-        // Start location updates
-        startLocationUpdates();
-    }
-
-    private void startBluetoothScanning() {
-        // TODO: Implement Bluetooth scanning logic
-    }
-
-    private void startLocationUpdates() {
-        // TODO: Implement location tracking logic
+        try {
+            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 10, locationListener);
+        } catch (SecurityException e) {
+            Log.e(TAG, "Location permission not granted", e);
+        }
     }
 
     private void updateFirebaseData(Location location) {
-        // TODO: Implement logic to update Firebase with user's location
+        String userId = "user_id"; // Replace with actual user ID
+        databaseReference.child("users").child(userId).child("latitude").setValue(location.getLatitude());
+        databaseReference.child("users").child(userId).child("longitude").setValue(location.getLongitude());
+    }
+
+    private void checkForNearbyUsers(Location currentLocation) {
+        final double PROXIMITY_RADIUS = 100.0; // meters
+        databaseReference.child("users").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for (DataSnapshot userSnapshot : dataSnapshot.getChildren()) {
+                    double userLat = userSnapshot.child("latitude").getValue(Double.class);
+                    double userLon = userSnapshot.child("longitude").getValue(Double.class);
+                    Location userLocation = new Location("");
+                    userLocation.setLatitude(userLat);
+                    userLocation.setLongitude(userLon);
+
+                    float distance = currentLocation.distanceTo(userLocation);
+                    if (distance < PROXIMITY_RADIUS) {
+                        Log.d(TAG, "Nearby user found: " + userSnapshot.getKey());
+                        triggerNotification(userSnapshot.getKey());
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Log.e(TAG, "Database error: " + databaseError.getMessage());
+            }
+        });
+    }
+
+    private void triggerNotification(String userId) {
+        // Sample Notification Code
+        NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        String channelId = "proximity_notification_channel";
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            NotificationChannel channel = new NotificationChannel(channelId, "Proximity Notifications", NotificationManager.IMPORTANCE_DEFAULT);
+            notificationManager.createNotificationChannel(channel);
+        }
+
+        Notification notification = new NotificationCompat.Builder(this, channelId)
+                .setContentTitle("Nearby User Detected")
+                .setContentText("User " + userId + " is nearby. Tap to connect.")
+                .setSmallIcon(R.drawable.logo) // Replace with your app's icon
+                .build();
+
+        notificationManager.notify(1, notification);
     }
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         Log.d(TAG, "Service Started");
         Toast.makeText(this, "Proximity Service Started", Toast.LENGTH_SHORT).show();
-
-        // Keep the service running
         return START_STICKY;
     }
 
@@ -70,7 +120,10 @@ public class ProximityService extends Service {
     public void onDestroy() {
         super.onDestroy();
         Log.d(TAG, "Service Destroyed");
-
-        // TODO: Clean up resources, stop location and Bluetooth scanning
+        if (locationManager != null && locationListener != null) {
+            locationManager.removeUpdates(locationListener);
+        }
     }
+
 }
+

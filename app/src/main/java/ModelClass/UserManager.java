@@ -14,12 +14,60 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.firestore.auth.User;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class UserManager {
 
     // Method to get the current Firebase user
     public static FirebaseUser getCurrentUser() {
         FirebaseAuth mAuth = FirebaseAuth.getInstance();
         return mAuth.getCurrentUser();
+    }
+    //method to retrieve post
+    // Callback interface for handling the retrieved posts
+    public interface PostsCallback {
+        void onPostsReceived(List<Posts> posts);
+        void onError(String error);
+    }
+
+    // Method in the UserManager class to retrieve posts
+    public static void getUserPosts(PostsCallback postsCallback) {
+        getCurrentUserDetail(new UserCallback() {
+            @Override
+            public void onCallback(Users user) {
+                if (user != null) {
+                    // If user is found, use the nickname to retrieve posts
+                    DatabaseReference postsRef = FirebaseDatabase.getInstance().getReference("posts");
+                    postsRef.orderByChild("nickname").equalTo(user.getNickname())
+                            .addListenerForSingleValueEvent(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                    if (dataSnapshot.exists()) {
+                                        List<Posts> userPosts = new ArrayList<>();
+                                        for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
+                                            Posts post = postSnapshot.getValue(Posts.class);
+                                            userPosts.add(post);
+                                        }
+                                        postsCallback.onPostsReceived(userPosts);
+                                    } else {
+                                        Log.d("FirebaseCheck", "No posts found for the user");
+                                        postsCallback.onError("No posts found for the user");
+                                    }
+                                }
+
+                                @Override
+                                public void onCancelled(@NonNull DatabaseError databaseError) {
+                                    Log.e("FirebaseCheck", "Error while reading posts", databaseError.toException());
+                                    postsCallback.onError("Error while reading posts");
+                                }
+                            });
+                } else {
+                    Log.d("FirebaseCheck", "User not found");
+                    postsCallback.onError("User not found");
+                }
+            }
+        });
     }
 
     // Method to get user's details such as email or UID
