@@ -110,4 +110,5 @@ public class PostAdapter extends BaseAdapter {
         AlertDialog dialog = builder.create();
         dialog.show();
     }
+
 }

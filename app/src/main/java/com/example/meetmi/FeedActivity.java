@@ -7,6 +7,7 @@ import android.content.DialogInterface;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.content.Intent;
+import android.util.Log;
 import android.view.View;
 
 import com.google.firebase.database.DatabaseReference;
@@ -37,6 +38,23 @@ public class FeedActivity extends AppCompatActivity {
         startService(serviceIntent);
 
         mDatabase = FirebaseDatabase.getInstance().getReference();
+
+       UserManager.getUserPosts(new UserManager.PostsCallback() {
+           @Override
+           public void onPostsReceived(List<Posts> posts) {
+               // Handle the list of posts for the current user
+               for (Posts post : posts) {
+                    Log.d("FirebaseDebug", "caption:" + post.getCaption());
+                }
+            }
+
+            @Override
+           public void onError(String error) {
+                // Handle the error, e.g., show a message to the user
+                Log.e("FirebaseCheck", error);
+            }
+        });
+
     }
 
 

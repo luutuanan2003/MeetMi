@@ -12,6 +12,9 @@ public class Posts {
     private List<String> comments; // Assuming this is aggregated or serialized comments
     private int reaction; // Default null, could be an enum or string
 
+    public Posts() {
+    }
+
     public Posts(String nickname, String avatar, List<String> photo, String video, String caption, String dateTime, List<String> comments, int reaction) {
         this.nickname = nickname;
         this.avatar = avatar;
@@ -42,6 +45,7 @@ public class Posts {
     public List<String> getPhoto() {
         return photo;
     }
+
 
     public void setPhoto(List<String> photo) {
         this.photo = photo;
