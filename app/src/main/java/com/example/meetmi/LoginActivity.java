@@ -43,6 +43,13 @@ public class LoginActivity extends AppCompatActivity {
 
         // this login feature is only to take to the corresponding activity immediately with no
         // authentication. DO NOT DELETE
+//        login.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Intent intent = new Intent(LoginActivity.this, ProfileActivity.class);
+//                startActivity(intent);
+//            }
+//        });
   //      login.setOnClickListener(new View.OnClickListener() {
 //            @Override
 //            public void onClick(View v) {
@@ -54,6 +61,19 @@ public class LoginActivity extends AppCompatActivity {
 //                startActivity(intent);
 //            }
 //        });
+
+
+
+
+            login.setOnClickListener(new View.OnClickListener() {
+           @Override
+           public void onClick(View v) {
+               String enteredUsername = usernameField.getText().toString();
+             String enteredPassword = passwordField.getText().toString();
+              // Perform authentication
+              authenticateUser(enteredUsername, enteredPassword);
+       }
+   });
 
 
 

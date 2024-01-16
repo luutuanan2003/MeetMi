@@ -9,9 +9,9 @@ import com.example.meetmi.R;
 
 public class FrameAdapter extends RecyclerView.Adapter<FrameAdapter.ViewHolder> {
     private LayoutInflater inflater;
-    private final int FRAME_TYPE_1 = 0;
-    private final int FRAME_TYPE_2 = 1;
-    private final int FRAME_TYPE_3 = 2;
+    private final int FRAME_TYPE_0 = 0;
+    private final int FRAME_TYPE_1 = 1;
+    private final int FRAME_TYPE_2 = 2;
 
 
     public FrameAdapter(Context context) {
@@ -22,11 +22,11 @@ public class FrameAdapter extends RecyclerView.Adapter<FrameAdapter.ViewHolder> 
     public int getItemViewType(int position) {
         switch (position) {
             case 0:
-                return FRAME_TYPE_1;
+                return FRAME_TYPE_0;
             case 1:
-                return FRAME_TYPE_2;
+                return FRAME_TYPE_1;
             case 2:
-                return FRAME_TYPE_3;
+                return FRAME_TYPE_2;
             // Add more cases as needed for additional frame types
         }
         return position;
@@ -37,14 +37,14 @@ public class FrameAdapter extends RecyclerView.Adapter<FrameAdapter.ViewHolder> 
     public FrameAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = null;
         switch (viewType) {
+            case FRAME_TYPE_0:
+                view = inflater.inflate(R.layout.list_item_post, parent, false);
+                break;
             case FRAME_TYPE_1:
-                view = inflater.inflate(R.layout.frame1, parent, false);
+                view = inflater.inflate(R.layout.list_item_post1, parent, false);
                 break;
             case FRAME_TYPE_2:
-                view = inflater.inflate(R.layout.frame2, parent, false);
-                break;
-            case FRAME_TYPE_3:
-                view = inflater.inflate(R.layout.frame3, parent, false);
+                view = inflater.inflate(R.layout.list_item_post2, parent, false);
                 break;
             // Add more cases as needed for additional frame types
         }
