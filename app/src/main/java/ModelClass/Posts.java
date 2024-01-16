@@ -20,7 +20,7 @@ public class Posts {
         this.avatar = avatar;
         this.photo = photo;
         this.video = video;
-        this.caption = caption;
+        this.caption = caption.toString();
         this.dateTime = dateTime;
         this.comments = comments;
         this.reaction = reaction;

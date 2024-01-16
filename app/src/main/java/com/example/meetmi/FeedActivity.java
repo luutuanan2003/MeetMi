@@ -10,6 +10,8 @@ import android.content.Intent;
 import android.util.Log;
 import android.view.View;
 
+import com.example.meetmi.customAdapter.FeedPostAdapter;
+import com.example.meetmi.customAdapter.PostAdapter;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.firestore.auth.User;
@@ -22,11 +24,17 @@ import java.util.List;
 import ModelClass.Posts;
 import ModelClass.UserCallback;
 import ModelClass.UserManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 
 public class FeedActivity extends AppCompatActivity {
 
     private DatabaseReference mDatabase;
+    private RecyclerView postsRecyclerView;
+    private FeedPostAdapter feedPostAdapter;
+
+    private List<Posts> postList = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,21 +47,24 @@ public class FeedActivity extends AppCompatActivity {
 
         mDatabase = FirebaseDatabase.getInstance().getReference();
 
+        postsRecyclerView = findViewById(R.id.postsRecyclerView);
+        postsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        feedPostAdapter = new FeedPostAdapter(this, postList);
+        postsRecyclerView.setAdapter(feedPostAdapter);
         UserManager.getUserPosts(new UserManager.PostsCallback() {
             @Override
             public void onPostsReceived(List<Posts> posts) {
-                // Handle the list of posts for the current user
-                for (Posts post : posts) {
-                    Log.d("FirebaseDebug", "caption:" + post.getCaption());
-                }
+                postList.clear();
+                postList.addAll(posts);
+                feedPostAdapter.notifyDataSetChanged();
             }
 
             @Override
             public void onError(String error) {
-                // Handle the error, e.g., show a message to the user
                 Log.e("FirebaseCheck", error);
             }
         });
+
 
     }
 
