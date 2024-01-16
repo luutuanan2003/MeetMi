@@ -1,6 +1,7 @@
 package com.example.meetmi.customAdapter;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -46,6 +47,7 @@ public class FeedPostAdapter extends RecyclerView.Adapter<FeedPostAdapter.FeedPo
         if (post.getPhoto() != null && !post.getPhoto().isEmpty()) {
             Glide.with(context).load(post.getPhoto().get(0)).into(holder.photoImageView);
         }
+        Log.d("photofromfirebase","photo"+post.getPhoto());
     }
 
     @Override
