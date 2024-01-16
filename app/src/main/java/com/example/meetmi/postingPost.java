@@ -12,8 +12,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.GridView;
-import android.widget.ImageView;
+
 
 import com.example.meetmi.customAdapter.GalleryAdapter;
 import com.google.firebase.database.DatabaseReference;
@@ -31,7 +30,6 @@ import ModelClass.UserManager;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 import android.app.AlertDialog;
-import android.widget.ListView;
 import android.widget.TextView;
 
 
@@ -90,8 +88,6 @@ public class postingPost extends AppCompatActivity {
         });
 
 
-//        galleryRecyclerView = findViewById(R.id.gallery_recycler_view);
-//        galleryRecyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
 
         postButton.setOnClickListener(new View.OnClickListener() {
             @Override

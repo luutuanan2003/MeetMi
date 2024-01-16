@@ -51,26 +51,26 @@ public class NotificationAdapter extends BaseAdapter {
             holder = new ViewHolder();
             holder.imageView = convertView.findViewById(R.id.userAvatar_notification);
             //will the textview being edited below overwritten?
-            holder.textView = convertView.findViewById(R.id.userName_notification);
-            holder.textView = convertView.findViewById(R.id.userNotification);
+            holder.nickName = convertView.findViewById(R.id.userName_notification);
+            holder.notification = convertView.findViewById(R.id.userNotification);
             convertView.setTag(holder);
         } else {
             holder = (ViewHolder) convertView.getTag();
         }
 
         Users user = users.get(position);
-        holder.textView.setText(user.getNickname());
+        holder.nickName.setText(user.getNickname());
+        //TODO: have a get notification method
+        //holder.notification.setText(user.getNotification());
+
+
         // Load image using Glide or Picasso
         Glide.with(context).load(user.getAvatar()).into(holder.imageView);
-
-        //TODO: have a get notification method
-        //holder.textView.setText(user.getNotification());
-
         return convertView;
     }
 
     static class ViewHolder {
         CircleImageView imageView;
-        TextView textView;
+        TextView nickName, notification;
     }
 }

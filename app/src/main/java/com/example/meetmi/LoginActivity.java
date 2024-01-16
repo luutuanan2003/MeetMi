@@ -41,19 +41,28 @@ public class LoginActivity extends AppCompatActivity {
         setVisible(R.id.errorTextLogin, false);
 
 
-        // this login feature is only to take to the newsfeed immediately with no
-        // authentication
+        // this login feature is only to take to the corresponding activity immediately with no
+        // authentication. DO NOT DELETE
+        login.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(LoginActivity.this, ProfileActivity.class);
+                startActivity(intent);
+            }
+        });
 
 
-            login.setOnClickListener(new View.OnClickListener() {
-           @Override
-           public void onClick(View v) {
-               String enteredUsername = usernameField.getText().toString();
-             String enteredPassword = passwordField.getText().toString();
-              // Perform authentication
-              authenticateUser(enteredUsername, enteredPassword);
-       }
-   });
+
+
+//            login.setOnClickListener(new View.OnClickListener() {
+//           @Override
+//           public void onClick(View v) {
+//               String enteredUsername = usernameField.getText().toString();
+//             String enteredPassword = passwordField.getText().toString();
+//              // Perform authentication
+//              authenticateUser(enteredUsername, enteredPassword);
+//       }
+//   });
 
         signupButton.setOnClickListener(new View.OnClickListener() {
             @Override

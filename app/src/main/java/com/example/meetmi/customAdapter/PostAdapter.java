@@ -6,7 +6,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
+
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.meetmi.R;
@@ -60,23 +64,27 @@ public class PostAdapter extends BaseAdapter {
             holder = new ViewHolder();
 
 
-            //will the textview and imageview being edited below overwritten?
-            holder.imageView = convertView.findViewById(R.id.userAvatar_post);
-            //TODO: solve the problem below that has been commented out
-            //holder.imageView = convertView.findViewById(R.id.userImage_post);
-            holder.textView = convertView.findViewById(R.id.username_post);
-            holder.textView = convertView.findViewById(R.id.caption_post);
+            holder.avatar = convertView.findViewById(R.id.userAvatar_post);
+            holder.userImage_post = convertView.findViewById(R.id.userImage_post);
+            holder.nickName = convertView.findViewById(R.id.username_post);
+            holder.caption = convertView.findViewById(R.id.caption_post);
             convertView.setTag(holder);
         } else {
             holder = (ViewHolder) convertView.getTag();
         }
+
+        // what is this for?
         UserManager.getCurrentUserDetail(new UserCallback() {
             @Override
             public void onCallback(Users user) {
                 if (user != null) {
                     user = users.get(position);
-                    holder.textView.setText(user.getNickname());
-                    Glide.with(context).load(user.getAvatar()).into(holder.imageView);
+                    holder.nickName.setText(user.getNickname());
+                    Glide.with(context).load(user.getAvatar()).into(holder.avatar);
+                    // for the photo of the post use the GalleryAdapter in the Activity class
+
+                    //TODO: implement this method
+                    //holder.caption.setText(post.getCaption);
                 } else {
                     showUserNotFoundDialog();
                 }
@@ -94,8 +102,9 @@ public class PostAdapter extends BaseAdapter {
     }
 
     static class ViewHolder {
-        CircleImageView imageView;
-        TextView textView;
+        CircleImageView avatar;
+        ImageView userImage_post;
+        TextView nickName, caption;
     }
 
     private void showUserNotFoundDialog() {
