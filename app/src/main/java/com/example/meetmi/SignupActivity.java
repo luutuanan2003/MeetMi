@@ -31,7 +31,7 @@ public class SignupActivity extends AppCompatActivity {
 
 
     //TODO: need to collect data from the nickname field and the button for the avatar as well
-
+    private Uri selectedImage;
     private EditText usernameField, passwordField, re_enter_passwordField, emailField, nickNameField;
     private Button signupButton;
     private DatabaseReference mDatabase;
@@ -86,7 +86,7 @@ public class SignupActivity extends AppCompatActivity {
         // Validation here for input values
 
         // Initialize other fields with default or empty values
-        String avatar = ""; // default or empty
+        String avatar = selectedImage != null ? selectedImage.toString() : ""; // default or empty
         String id = ""; // generate or leave empty
         double latitude = 0; // default value
         double longitude = 0; // default value
@@ -149,7 +149,7 @@ public class SignupActivity extends AppCompatActivity {
             Uri imageUri = data.getData();
             ImageView photoView = findViewById(R.id.userAvatar_signup);
 //            photoView.setImageURI(imageUri);
-
+            selectedImage = imageUri;
             Glide.with(this)
                     .load(imageUri)
                     .apply(new RequestOptions().circleCrop())

@@ -149,23 +149,7 @@ public class postingPost extends AppCompatActivity {
         startActivityForResult(Intent.createChooser(intent, "Select Picture"), PICK_IMAGE_REQUEST);
     }
 
-//    on activity cu
-//    @Override
-//    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-//        super.onActivityResult(requestCode, resultCode, data);
-//        if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null && data.getData() != null) {
-//            selectedImageUri = data.getData();
-//            imageUrls.add(selectedImageUri);
-//
-//            RecyclerView galleryRecyclerView = findViewById(R.id.gallery_recycler_view);
-//
-//            LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
-//            galleryRecyclerView.setLayoutManager(layoutManager);
-//
-//            GalleryAdapter galleryAdapter = new GalleryAdapter(this, imageUrls);
-//            galleryRecyclerView.setAdapter(galleryAdapter);
-//        }
-//    }
+
 
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -195,35 +179,7 @@ public class postingPost extends AppCompatActivity {
         galleryRecyclerView.setAdapter(galleryAdapter);
     }
 
-//    @Override
-//    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-//        super.onActivityResult(requestCode, resultCode, data);
-//        if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null && data.getData() != null) {
-//            // get the image from the device
-//            selectedImageUri = data.getData();
-//            // add of the image url in the list
-//            imageUrls.add(selectedImageUri);
-//
-//            ListView galleryView = findViewById(R.id.gallery_posting);
-//
-//            // pass the image uri into the adapter and
-//            // then use that adapter to bring the image into the listview
-//            GalleryAdapter galleryAdapter = new GalleryAdapter(this, imageUrls);
-//            galleryView.setAdapter(galleryAdapter);
-//        }
-//    }
 
-
-//    old code for getting image from the device and put to the app
-//    @Override
-//    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-//        super.onActivityResult(requestCode, resultCode, data);
-//        if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null && data.getData() != null) {
-//            Uri imageUri = data.getData();
-//            ImageView photoView = findViewById(R.id.photoView);
-//            photoView.setImageURI(imageUri);
-//        }
-//    }
 
     private void post_toFeed() {
         // Initialize your variables here
