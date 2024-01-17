@@ -8,10 +8,14 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.meetmi.R;
 
 public class FrameAdapter extends RecyclerView.Adapter<FrameAdapter.ViewHolder> {
+    private OnItemClickListener listener;
     private LayoutInflater inflater;
-    private final int FRAME_TYPE_0 = 0;
-    private final int FRAME_TYPE_1 = 1;
-    private final int FRAME_TYPE_2 = 2;
+    public final int FRAME_TYPE_0 = 0;
+    public final int FRAME_TYPE_1 = 1;
+    public final int FRAME_TYPE_2 = 2;
+    public void setOnItemClickListener(OnItemClickListener listener) {
+        this.listener = listener;
+    }
 
 
     public FrameAdapter(Context context) {
@@ -48,8 +52,12 @@ public class FrameAdapter extends RecyclerView.Adapter<FrameAdapter.ViewHolder> 
                 break;
             // Add more cases as needed for additional frame types
         }
-        return new ViewHolder(view);
+        return new ViewHolder(view, listener);
     }
+
+
+
+
 
 
     @Override
@@ -62,12 +70,21 @@ public class FrameAdapter extends RecyclerView.Adapter<FrameAdapter.ViewHolder> 
         return 3; // Adjust this number based on your data
     }
 
-    public static class ViewHolder extends RecyclerView.ViewHolder {
+    public class ViewHolder extends RecyclerView.ViewHolder {
         // Define views in the list item
 
-        public ViewHolder(View itemView) {
+        public ViewHolder(View itemView, final OnItemClickListener listener) {
             super(itemView);
             // Initialize views
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    int position = getAdapterPosition();
+                    if (listener != null && position != RecyclerView.NO_POSITION) {
+                        listener.onItemClick(position);
+                    }
+                }
+            });
         }
     }
 }

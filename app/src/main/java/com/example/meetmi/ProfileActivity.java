@@ -22,6 +22,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.meetmi.customAdapter.FrameAdapter;
+import com.example.meetmi.customAdapter.OnItemClickListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseUser;
@@ -37,26 +38,39 @@ import ModelClass.UserCallback;
 import ModelClass.UserManager;
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class ProfileActivity extends AppCompatActivity {
+public class ProfileActivity extends AppCompatActivity implements OnItemClickListener{
     private static final int PICK_IMAGE_REQUEST = 123;
-    Button changePassword;
+    Button changePassword, changePhotoframe;
     private DatabaseReference mDatabase;
     private TextView nickName_profile;
     private ImageView change_userAvatar, change_NickName;
     private CircleImageView userAvatar;
+    private int photoFrameId;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
         getWindow().setStatusBarColor(Color.parseColor("#1F1F1F"));
 
-        setVisible(R.id.set_password_profile,false);
 
         change_userAvatar = findViewById(R.id.changeUserAvatarP);
         change_NickName = findViewById(R.id.changeUserNicknameP);
         nickName_profile = findViewById(R.id.nickname_profile);
         userAvatar = findViewById(R.id.userAvatar_Profile);
         changePassword = (Button) findViewById(R.id.password_profile);
+        changePhotoframe = (Button) findViewById(R.id.set_photoframe_profile);
+        setVisible(R.id.set_photoframe_profile,false);
+
+
+        //change the photoframe
+        changePhotoframe.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d("item","Clicked item: " + photoFrameId);
+                //TODO: implement the method below
+                // setChangeFrame();
+            }
+        });
 
         //change nickname
         change_NickName.setOnClickListener(new View.OnClickListener() {
@@ -109,23 +123,45 @@ public class ProfileActivity extends AppCompatActivity {
         LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
         frameRecyclerView.setLayoutManager(layoutManager);
 
-        FrameAdapter frameAdapter = new FrameAdapter(this); // Pass context here
+        FrameAdapter frameAdapter = new FrameAdapter(this);
+        frameAdapter.setOnItemClickListener(this);
         frameRecyclerView.setAdapter(frameAdapter);
 
 
-        // change password method
-        changePassword.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                View cardview = findViewById(R.id.set_password_profile); // Replace with your layout's ID
-                if (cardview.getVisibility() == View.VISIBLE) {
-                    setVisible(R.id.set_password_profile,false);
-                } else {
-                    setVisible(R.id.set_password_profile,true);
-                }
-            }
-        });
     }
+
+    // Click on a frame and get that frame position and pass in the photoFrameId to
+    // set that to the userPhotoFrame
+    @Override
+    public void onItemClick(int position) {
+        // Handle the click event for the item at the specified position
+        Log.d("item","Clicked item position: " + position);
+        photoFrameId = position;
+        if (changePhotoframe.getVisibility() == View.VISIBLE) {
+            setVisible(R.id.set_photoframe_profile,false);
+        } else {
+            setVisible(R.id.set_photoframe_profile,true);
+        }
+    }
+        //TODO: try this out to change the user frametype
+      public void setChangeFrame() {
+          Log.d("item","Clicked on button" + photoFrameId);
+      }
+//                switch (change_Frametype) {
+//                    case 1:
+//                        view = inflater.inflate(R.layout.list_item_post, parent, false);
+//                        break;
+//                    case 2:
+//                        view = inflater.inflate(R.layout.list_item_post1, parent, false);
+//                        break;
+//                    case 3:
+//                        view = inflater.inflate(R.layout.list_item_post2, parent, false);
+//                        break;
+//                    // Add more cases as needed for additional frame types
+//                }
+//              }
+
+
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
