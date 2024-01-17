@@ -196,6 +196,7 @@ public class postingPost extends AppCompatActivity {
 
         // Initialize other required fields
         List<String> comments = new ArrayList<>();
+        comments.add("");
         int reaction = 0;
 
         UserManager.getCurrentUserDetail(new UserCallback() {
