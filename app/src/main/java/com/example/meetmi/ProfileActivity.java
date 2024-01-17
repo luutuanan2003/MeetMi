@@ -259,7 +259,6 @@ public class ProfileActivity extends AppCompatActivity implements OnItemClickLis
         builder.setTitle("Change Your Password");
 
         // Inflate and set the layout for the dialog
-        // Pass null as the parent view because it's going in the dialog layout
         View dialogView = getLayoutInflater().inflate(R.layout.dialog_change_password, null);
         final EditText password = dialogView.findViewById(R.id.password_CP);
         final EditText confirmPassword = dialogView.findViewById(R.id.confirmPassword_CP);
@@ -269,6 +268,13 @@ public class ProfileActivity extends AppCompatActivity implements OnItemClickLis
 
         // Set up the buttons
         builder.setPositiveButton("Confirm", null); // Set to null first to override the closing behavior
+
+        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
 
         AlertDialog dialog = builder.create();
 
@@ -299,16 +305,8 @@ public class ProfileActivity extends AppCompatActivity implements OnItemClickLis
         });
 
         dialog.show();
-
-        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.cancel();
-            }
-        });
-
-        builder.show();
     }
+
 
     private void keepDialogOpen(DialogInterface dialog) {
         // The AlertDialog is an instance of Dialog, so we can get it here and prevent it from closing

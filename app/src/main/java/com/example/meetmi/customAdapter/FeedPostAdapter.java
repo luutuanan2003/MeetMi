@@ -14,6 +14,8 @@ import com.bumptech.glide.Glide;
 import com.example.meetmi.R;
 import java.util.List;
 import ModelClass.Posts;
+
+import com.google.android.material.imageview.ShapeableImageView;
 import com.squareup.picasso.Picasso;
 
 public class FeedPostAdapter extends RecyclerView.Adapter<FeedPostAdapter.FeedPostViewHolder> {
@@ -58,7 +60,7 @@ public class FeedPostAdapter extends RecyclerView.Adapter<FeedPostAdapter.FeedPo
 
     public static class FeedPostViewHolder extends RecyclerView.ViewHolder {
         TextView captionTextView, nicknameTextView, dateTimeTextView;
-        ImageView avatarImageView;
+        ShapeableImageView avatarImageView;
         RecyclerView galleryRecyclerView;
 
         public FeedPostViewHolder(View itemView) {
