@@ -1,21 +1,19 @@
 package com.example.meetmi.customAdapter;
 
 import android.content.Context;
+import android.net.Uri;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.example.meetmi.R;
-
 import java.util.List;
-
 import ModelClass.Posts;
-
-//Create to handle the use of retrieving post from Firebase
 
 public class FeedPostAdapter extends RecyclerView.Adapter<FeedPostAdapter.FeedPostViewHolder> {
 
@@ -40,14 +38,14 @@ public class FeedPostAdapter extends RecyclerView.Adapter<FeedPostAdapter.FeedPo
         holder.nicknameTextView.setText(post.getNickname());
         holder.dateTimeTextView.setText(post.getDateTime());
 
-        // Use Glide or another image loading library to load images
         Glide.with(context).load(post.getAvatar()).into(holder.avatarImageView);
 
-        // Assuming 'photo' is a List<String> of image URLs, load the first one for display
-        if (post.getPhoto() != null && !post.getPhoto().isEmpty()) {
-            Glide.with(context).load(post.getPhoto().get(0)).into(holder.photoImageView);
-        }
-        Log.d("photofromfirebase","photo"+post.getPhoto());
+        List<String> imageUris = post.getPhoto(); // Assuming Posts class has a method to get photo URIs
+        GalleryAdapter2 galleryAdapter = new GalleryAdapter2(context, imageUris);
+        holder.galleryRecyclerView.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false));
+        holder.galleryRecyclerView.setAdapter(galleryAdapter);
+
+        Log.d("photofromfirebase", "photo" + post.getPhoto());
     }
 
     @Override
@@ -57,7 +55,8 @@ public class FeedPostAdapter extends RecyclerView.Adapter<FeedPostAdapter.FeedPo
 
     public static class FeedPostViewHolder extends RecyclerView.ViewHolder {
         TextView captionTextView, nicknameTextView, dateTimeTextView;
-        ImageView avatarImageView, photoImageView;
+        ImageView avatarImageView;
+        RecyclerView galleryRecyclerView;
 
         public FeedPostViewHolder(View itemView) {
             super(itemView);
@@ -65,9 +64,7 @@ public class FeedPostAdapter extends RecyclerView.Adapter<FeedPostAdapter.FeedPo
             nicknameTextView = itemView.findViewById(R.id.username_post);
             dateTimeTextView = itemView.findViewById(R.id.dateTimeTextView);
             avatarImageView = itemView.findViewById(R.id.userAvatar_post);
-            photoImageView = itemView.findViewById(R.id.userImage_post);
-            // Initialize other views from list_item_post.xml
+            galleryRecyclerView = itemView.findViewById(R.id.galleryRecyclerView);
         }
     }
 }
-

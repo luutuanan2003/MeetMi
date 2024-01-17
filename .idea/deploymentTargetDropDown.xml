@@ -26,15 +26,6 @@
                 </Key>
               </deviceKey>
             </Target>
-            <Target>
-              <type value="RUNNING_DEVICE_TARGET" />
-              <deviceKey>
-                <Key>
-                  <type value="VIRTUAL_DEVICE_PATH" />
-                  <value value="C:\Users\mrlon\.android\avd\phone_test_2.avd" />
-                </Key>
-              </deviceKey>
-            </Target>
           </runningDeviceTargetsSelectedWithDialog>
         </State>
       </entry>
