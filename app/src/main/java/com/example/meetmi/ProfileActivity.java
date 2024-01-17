@@ -268,27 +268,38 @@ public class ProfileActivity extends AppCompatActivity implements OnItemClickLis
         builder.setView(dialogView);
 
         // Set up the buttons
-        builder.setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
+        builder.setPositiveButton("Confirm", null); // Set to null first to override the closing behavior
+
+        AlertDialog dialog = builder.create();
+
+        dialog.setOnShowListener(new DialogInterface.OnShowListener() {
             @Override
-            public void onClick(DialogInterface dialog, int which) {
-                String passwordForCheck = password.getText().toString().trim();
-                String confirmPasswordForCheck = confirmPassword.getText().toString().trim();
-                if (!validatePassword(passwordForCheck, confirmPasswordForCheck)) {
-                    // Show error message and keep the dialog open
-                    passwordError.setText("Passwords do not match");
-                    passwordError.setVisibility(View.VISIBLE);
-                    // Prevent dialog from closing
-                    keepDialogOpen(dialog);
-                } else {
-                    passwordError.setVisibility(View.GONE);
-                    String newPassword = password.getText().toString().trim();
-                    if (!newPassword.isEmpty()) {
-                        updatePassword(newPassword);
-                        dialog.dismiss();
+            public void onShow(DialogInterface dialogInterface) {
+                Button button = ((AlertDialog) dialog).getButton(AlertDialog.BUTTON_POSITIVE);
+                button.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        String passwordForCheck = password.getText().toString().trim();
+                        String confirmPasswordForCheck = confirmPassword.getText().toString().trim();
+                        if (!validatePassword(passwordForCheck, confirmPasswordForCheck)) {
+                            // Show error message and keep the dialog open
+                            passwordError.setText("Passwords do not match");
+                            passwordError.setVisibility(View.VISIBLE);
+                        } else {
+                            passwordError.setVisibility(View.GONE);
+                            String newPassword = passwordForCheck;
+                            if (!newPassword.isEmpty()) {
+                                updatePassword(newPassword);
+                                dialog.dismiss();
+                            }
+                        }
                     }
-                }
+                });
             }
         });
+
+        dialog.show();
+
         builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
