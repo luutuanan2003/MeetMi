@@ -43,7 +43,7 @@ public class ProximityService extends Service {
                 checkForNearbyUsers(location);
             }
 
-            // Implement other LocationListener methods as necessary
+
         };
 
         try {
@@ -54,13 +54,13 @@ public class ProximityService extends Service {
     }
 
     private void updateFirebaseData(Location location) {
-        String userId = "user_id"; // Replace with actual user ID
-        databaseReference.child("users").child(userId).child("latitude").setValue(location.getLatitude());
-        databaseReference.child("users").child(userId).child("longitude").setValue(location.getLongitude());
+        String nickname = "nickname"; // Replace with actual user ID
+        databaseReference.child("users").child(nickname).child("latitude").setValue(location.getLatitude());
+        databaseReference.child("users").child(nickname).child("longitude").setValue(location.getLongitude());
     }
 
     private void checkForNearbyUsers(Location currentLocation) {
-        final double PROXIMITY_RADIUS = 100.0; // meters
+        final double PROXIMITY_RADIUS = 20; // meters
         databaseReference.child("users").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -73,7 +73,7 @@ public class ProximityService extends Service {
 
                     float distance = currentLocation.distanceTo(userLocation);
                     if (distance < PROXIMITY_RADIUS) {
-                        Log.d(TAG, "Nearby user found: " + userSnapshot.getKey());
+                        Log.d("StressPass", "Nearby user found: " + userSnapshot.getKey());
                         triggerNotification(userSnapshot.getKey());
                     }
                 }

@@ -171,11 +171,11 @@ public class postingPost extends AppCompatActivity {
             }
 
             uploadImagesToFirebaseStorage(imageUrls); // Call the upload method
-            updateGalleryRecyclerView(); // Update UI if necessary
+            updateGalleryRecyclerView(imageUrls); // Update UI if necessary
         }
     }
 
-    private void updateGalleryRecyclerView() {
+    private void updateGalleryRecyclerView(List<Uri> imageUrls) {
         RecyclerView galleryRecyclerView = findViewById(R.id.gallery_recycler_view);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
         galleryRecyclerView.setLayoutManager(layoutManager);
@@ -187,9 +187,7 @@ public class postingPost extends AppCompatActivity {
 
     private void post_toFeed() {
         // Initialize your variables here
-        for (Uri uri : imageUrls) {
-            imageUrlsString.add(uri.toString());
-        }
+
         String video = ""; // Initialize video
         String caption = CaptionField.getText().toString().trim();
         LocalDateTime now = LocalDateTime.now();
