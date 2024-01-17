@@ -1,5 +1,6 @@
 package com.example.meetmi;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -17,14 +18,20 @@ import android.widget.EditText;
 
 
 import com.example.meetmi.customAdapter.GalleryAdapter;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 import com.squareup.picasso.Picasso;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import ModelClass.Posts;
 import ModelClass.UserCallback;
@@ -33,13 +40,16 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 import android.app.AlertDialog;
 import android.widget.TextView;
+import android.widget.Toast;
 
 
 public class postingPost extends AppCompatActivity {
     private static final int PICK_IMAGE_REQUEST = 1;
     private DatabaseReference mDatabase;
     private EditText CaptionField;
+    private StorageReference mStorageRef;
     private Uri selectedImageUri;
+    private List<String> imageUrlsString = new ArrayList<>();
     private List<Uri> imageUrls = new ArrayList<>();
     private CircleImageView user_Avatar;
     private TextView user_Nickname;
@@ -54,7 +64,7 @@ public class postingPost extends AppCompatActivity {
 
         Log.d("red", "hehehehehehe");
 
-
+        mStorageRef = FirebaseStorage.getInstance().getReference();
         mDatabase = FirebaseDatabase.getInstance().getReference();
         CaptionField = findViewById(R.id.captionField);
         postButton = findViewById(R.id.postButton);
@@ -136,12 +146,6 @@ public class postingPost extends AppCompatActivity {
         }
     }
 
-
-
-
-
-
-
     public void uploadImage(View view) {
         Intent intent = new Intent(Intent.ACTION_PICK);
         intent.setType("image/*");
@@ -149,25 +153,25 @@ public class postingPost extends AppCompatActivity {
         startActivityForResult(Intent.createChooser(intent, "Select Picture"), PICK_IMAGE_REQUEST);
     }
 
-
-
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK) {
+            imageUrls.clear(); // Clear the list to prevent duplicates if this is called again
             if (data.getClipData() != null) {
                 // Multiple images selected
                 int count = data.getClipData().getItemCount();
                 for (int i = 0; i < count; i++) {
                     Uri imageUri = data.getClipData().getItemAt(i).getUri();
-                    imageUrls.add(imageUri);
+                    imageUrls.add(imageUri); // Add each URI to the list
                 }
             } else if (data.getData() != null) {
                 // Single image selected
                 Uri imageUri = data.getData();
-                imageUrls.add(imageUri);
+                imageUrls.add(imageUri); // Add single URI to the list
             }
 
-            updateGalleryRecyclerView();
+            uploadImagesToFirebaseStorage(imageUrls); // Call the upload method
+            updateGalleryRecyclerView(); // Update UI if necessary
         }
     }
 
@@ -183,9 +187,8 @@ public class postingPost extends AppCompatActivity {
 
     private void post_toFeed() {
         // Initialize your variables here
-        List<String> photoUrls = new ArrayList<>();
         for (Uri uri : imageUrls) {
-            photoUrls.add(uri.toString());
+            imageUrlsString.add(uri.toString());
         }
         String video = ""; // Initialize video
         String caption = CaptionField.getText().toString().trim();
@@ -206,7 +209,7 @@ public class postingPost extends AppCompatActivity {
                     String avatar = user.getAvatar(); // Assuming getAvatar() method exists
 
                     // Creating post object
-                    Posts post = new Posts(nickname, avatar, photoUrls, video, caption, dateTime, comments, reaction);
+                    Posts post = new Posts(nickname, avatar, imageUrlsString, video, caption, dateTime, comments, reaction);
 
                     // Saving to Firebase
                     mDatabase.child("posts").push().setValue(post);
@@ -277,4 +280,40 @@ public class postingPost extends AppCompatActivity {
             aView.setVisibility(View.INVISIBLE);
     }
 
+    private void uploadImagesToFirebaseStorage(List<Uri> imageUris) {
+        for (Uri imageUri : imageUris) {
+            if (imageUri != null) {
+                // Create a unique file name for each image
+                StorageReference fileRef = mStorageRef.child("avatars/" + UUID.randomUUID().toString() + ".jpg");
+
+                // Upload each file to Firebase Storage
+                fileRef.putFile(imageUri)
+                        .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                            @Override
+                            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                                // Get the download URL for each image
+                                fileRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                                    @Override
+                                    public void onSuccess(Uri downloadUri) {
+                                        // Call a method to handle the download URL for each image
+                                        getImageUrl(downloadUri.toString());
+                                    }
+                                });
+                            }
+                        })
+                        .addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                // Handle unsuccessful uploads for each image
+                                Toast.makeText(postingPost.this, "Upload failed for image: " + e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
+                            }
+                        });
+            }
+        }
+    }
+
+    private void getImageUrl (String avatarUrl)
+    {
+        imageUrlsString.add(avatarUrl);
+    }
 }
