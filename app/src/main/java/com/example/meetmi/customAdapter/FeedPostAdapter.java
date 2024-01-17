@@ -22,10 +22,17 @@ public class FeedPostAdapter extends RecyclerView.Adapter<FeedPostAdapter.FeedPo
 
     private Context context;
     private List<Posts> postsList;
+    private OnPostInteractionListener listener;
 
-    public FeedPostAdapter(Context context, List<Posts> postsList) {
+
+    public interface OnPostInteractionListener {
+        void onCommentClick(int position);
+    }
+
+    public FeedPostAdapter(Context context, List<Posts> postsList, OnPostInteractionListener listener) {
         this.context = context;
         this.postsList = postsList;
+        this.listener = listener;
     }
 
     @Override
@@ -48,7 +55,24 @@ public class FeedPostAdapter extends RecyclerView.Adapter<FeedPostAdapter.FeedPo
         GalleryAdapter2 galleryAdapter = new GalleryAdapter2(context, imageUris);
         holder.galleryRecyclerView.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false));
         holder.galleryRecyclerView.setAdapter(galleryAdapter);
+        //set up comment
+        holder.commentImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (listener != null) {
+                    listener.onCommentClick(holder.getAdapterPosition());
+                }
+            }
+        });
 
+        holder.reactionImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (listener != null) {
+                    listener.onCommentClick(holder.getAdapterPosition());
+                }
+            }
+        });
         Log.d("photofromfirebase", "photo" + post.getPhoto());
     }
 
@@ -62,6 +86,7 @@ public class FeedPostAdapter extends RecyclerView.Adapter<FeedPostAdapter.FeedPo
         TextView captionTextView, nicknameTextView, dateTimeTextView;
         ShapeableImageView avatarImageView;
         RecyclerView galleryRecyclerView;
+        ImageView commentImageView,reactionImageView;
 
         public FeedPostViewHolder(View itemView) {
             super(itemView);
@@ -69,7 +94,10 @@ public class FeedPostAdapter extends RecyclerView.Adapter<FeedPostAdapter.FeedPo
             nicknameTextView = itemView.findViewById(R.id.username_post);
             dateTimeTextView = itemView.findViewById(R.id.dateTimeTextView);
             avatarImageView = itemView.findViewById(R.id.userAvatar_post);
+            commentImageView = itemView.findViewById(R.id.commentP);
+            reactionImageView = itemView.findViewById(R.id.reactionB);
             galleryRecyclerView = itemView.findViewById(R.id.galleryRecyclerView);
+
         }
     }
 }

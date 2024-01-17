@@ -29,7 +29,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 
-public class FeedActivity extends AppCompatActivity {
+public class FeedActivity extends AppCompatActivity implements FeedPostAdapter.OnPostInteractionListener {
 
     private DatabaseReference mDatabase;
     private RecyclerView postsRecyclerView;
@@ -50,9 +50,9 @@ public class FeedActivity extends AppCompatActivity {
 
         postsRecyclerView = findViewById(R.id.postsRecyclerView);
         postsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        feedPostAdapter = new FeedPostAdapter(this, postList);
+        feedPostAdapter = new FeedPostAdapter(this, postList,this);
         postsRecyclerView.setAdapter(feedPostAdapter);
-        commentSection = findViewById(R.id.reactionB);
+
         UserManager.getUserPosts(new UserManager.PostsCallback() {
             @Override
             public void onPostsReceived(List<Posts> posts) {
@@ -91,4 +91,8 @@ public class FeedActivity extends AppCompatActivity {
     }
 
 
+    @Override
+    public void onCommentClick(int position) {
+
+    }
 }
