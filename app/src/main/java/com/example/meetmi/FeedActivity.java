@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.content.Intent;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageView;
 
 import com.example.meetmi.customAdapter.FeedPostAdapter;
 import com.example.meetmi.customAdapter.PostAdapter;
@@ -33,7 +34,7 @@ public class FeedActivity extends AppCompatActivity {
     private DatabaseReference mDatabase;
     private RecyclerView postsRecyclerView;
     private FeedPostAdapter feedPostAdapter;
-
+    private ImageView commentSection,reactionSection;
     private List<Posts> postList = new ArrayList<>();
 
     @Override
@@ -51,6 +52,7 @@ public class FeedActivity extends AppCompatActivity {
         postsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         feedPostAdapter = new FeedPostAdapter(this, postList);
         postsRecyclerView.setAdapter(feedPostAdapter);
+        commentSection = findViewById(R.id.reactionB);
         UserManager.getUserPosts(new UserManager.PostsCallback() {
             @Override
             public void onPostsReceived(List<Posts> posts) {
@@ -64,6 +66,7 @@ public class FeedActivity extends AppCompatActivity {
                 Log.e("FirebaseCheck", error);
             }
         });
+
 
 
     }
