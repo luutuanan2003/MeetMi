@@ -188,7 +188,7 @@ public class postingPost extends AppCompatActivity {
     private void post_toFeed() {
         // Initialize your variables here
 
-        String video = ""; // Initialize video
+
         String caption = CaptionField.getText().toString().trim();
         LocalDateTime now = LocalDateTime.now();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
@@ -206,7 +206,7 @@ public class postingPost extends AppCompatActivity {
                     // Now that we have the user, we can create and post
                     String nickname = user.getNickname();
                     String avatar = user.getAvatar(); // Assuming getAvatar() method exists
-
+                    String video = user.getEmail(); // Initialize video
                     // Creating post object
                     Posts post = new Posts(nickname, avatar, imageUrlsString, video, caption, dateTime, comments, reaction);
 

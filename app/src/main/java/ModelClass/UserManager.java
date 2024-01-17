@@ -37,9 +37,9 @@ public class UserManager {
             @Override
             public void onCallback(Users user) {
                 if (user != null) {
-                    // If user is found, use the nickname to retrieve posts
+                    // If user is found, use the email to retrieve posts
                     DatabaseReference postsRef = FirebaseDatabase.getInstance().getReference("posts");
-                    postsRef.orderByChild("nickname").equalTo(user.getNickname())
+                    postsRef.orderByChild("video").equalTo(user.getEmail())
                             .addListenerForSingleValueEvent(new ValueEventListener() {
                                 @Override
                                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
