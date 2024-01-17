@@ -54,8 +54,7 @@
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:padding="15dp"
-        app:srcCompat="@drawable/search"
-        android:onClick="goto_FeedActivity"/>
+        app:srcCompat="@drawable/search" />
 
     <ImageView
         android:layout_width="30dp"
@@ -66,12 +65,13 @@
         android:onClick = "goto_postingPost"/>
 
     <ImageView
-        android:id="@+id/imageView8"
+        android:id="@+id/notification"
         android:layout_width="30dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:padding="15dp"
-        app:srcCompat="@drawable/star1" />
+        app:srcCompat="@drawable/star1"
+        android:onClick="goto_notification"/>
 
     <ImageView
         android:layout_width="30dp"

@@ -147,22 +147,23 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:padding="15dp"
-            app:srcCompat="@drawable/home" />
+            app:srcCompat="@drawable/home"
+            android:onClick="goto_feed"/>
 
         <ImageView
             android:layout_width="30dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:padding="15dp"
-            app:srcCompat="@drawable/search" />
+            app:srcCompat="@drawable/search"
+            android:onClick="gotosearch"/>
 
         <ImageView
             android:layout_width="30dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:padding="15dp"
-            app:srcCompat="@drawable/post"
-            android:onClick = "goto_postingPost"/>
+            app:srcCompat="@drawable/post" />
 
         <ImageView
             android:id="@+id/imageView8"
@@ -170,14 +171,16 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:padding="15dp"
-            app:srcCompat="@drawable/star1" />
+            app:srcCompat="@drawable/star1"
+            android:onClick="goto_notification"/>
 
         <ImageView
             android:layout_width="30dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:padding="15dp"
-            app:srcCompat="@drawable/profile" />
+            app:srcCompat="@drawable/profile"
+            android:onClick="goto_profile"/>
     </LinearLayout>
 
 

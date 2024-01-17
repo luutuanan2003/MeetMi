@@ -262,4 +262,22 @@ public class postingPost extends AppCompatActivity {
         alert.show();
     }
 
+    public void goto_feed(View view) {
+        Intent intent = new Intent(postingPost.this,FeedActivity.class);
+        startActivity(intent);
+        finish();
+    }
+
+    public void goto_notification(View view) {
+        Intent intent = new Intent(postingPost.this,NotificationActivity.class);
+        startActivity(intent);
+        finish();
+    }
+
+    public void goto_profile(View view) {
+        Intent intent = new Intent(postingPost.this,ProfileActivity.class);
+        startActivity(intent);
+        finish();
+    }
+
 }

@@ -315,6 +315,24 @@ public class ProfileActivity extends AppCompatActivity {
         AlertDialog dialog = builder.create();
         dialog.show();
     }
+
+    public void goto_feed(View view) {
+        Intent intent = new Intent(ProfileActivity.this,FeedActivity.class);
+        startActivity(intent);
+        finish();
+    }
+
+    public void goto_notification(View view) {
+        Intent intent = new Intent(ProfileActivity.this,NotificationActivity.class);
+        startActivity(intent);
+        finish();
+    }
+
+    public void goto_postingPost(View view) {
+        Intent intent = new Intent(ProfileActivity.this,postingPost.class);
+        startActivity(intent);
+        finish();
+    }
 }
 
 

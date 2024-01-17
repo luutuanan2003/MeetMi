@@ -81,6 +81,11 @@ public class FeedActivity extends AppCompatActivity {
         startActivity(intent);
         finish();
     }
+    public void goto_notification(View view) {
+        Intent intent = new Intent(FeedActivity.this,NotificationActivity.class);
+        startActivity(intent);
+        finish();
+    }
 
 
 }
