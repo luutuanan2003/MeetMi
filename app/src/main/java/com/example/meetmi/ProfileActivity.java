@@ -69,7 +69,14 @@ public class ProfileActivity extends AppCompatActivity implements OnItemClickLis
         changePhotoframe = (Button) findViewById(R.id.set_photoframe_profile);
         setVisible(R.id.set_photoframe_profile,false);
 
-
+        //change password
+        changePassword.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v) {
+                showChangePassWordDialog();
+            }
+        });
         //change the photoframe
         changePhotoframe.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -240,6 +247,72 @@ public class ProfileActivity extends AppCompatActivity implements OnItemClickLis
         intent.setAction(Intent.ACTION_GET_CONTENT);
         startActivityForResult(Intent.createChooser(intent, "Select Picture"), PICK_IMAGE_REQUEST);
     }
+    private boolean validatePassword(String password,String confirmPassword){
+        if(!password.equals(confirmPassword)){
+            return false;
+        } else {
+            return true;
+        }
+    }
+    private void showChangePassWordDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(ProfileActivity.this);
+        builder.setTitle("Change Your Password");
+
+        // Inflate and set the layout for the dialog
+        // Pass null as the parent view because it's going in the dialog layout
+        View dialogView = getLayoutInflater().inflate(R.layout.dialog_change_password, null);
+        final EditText password = dialogView.findViewById(R.id.password_CP);
+        final EditText confirmPassword = dialogView.findViewById(R.id.confirmPassword_CP);
+        final TextView passwordError = dialogView.findViewById(R.id.passwordError_CP);
+
+        builder.setView(dialogView);
+
+        // Set up the buttons
+        builder.setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                String passwordForCheck = password.getText().toString().trim();
+                String confirmPasswordForCheck = confirmPassword.getText().toString().trim();
+                if (!validatePassword(passwordForCheck, confirmPasswordForCheck)) {
+                    // Show error message and keep the dialog open
+                    passwordError.setText("Passwords do not match");
+                    passwordError.setVisibility(View.VISIBLE);
+                    // Prevent dialog from closing
+                    keepDialogOpen(dialog);
+                } else {
+                    passwordError.setVisibility(View.GONE);
+                    String newPassword = password.getText().toString().trim();
+                    if (!newPassword.isEmpty()) {
+                        updatePassword(newPassword);
+                        dialog.dismiss();
+                    }
+                }
+            }
+        });
+        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
+
+        builder.show();
+    }
+
+    private void keepDialogOpen(DialogInterface dialog) {
+        // The AlertDialog is an instance of Dialog, so we can get it here and prevent it from closing
+        if (dialog instanceof AlertDialog) {
+            AlertDialog alertDialog = (AlertDialog) dialog;
+            Button positiveButton = alertDialog.getButton(AlertDialog.BUTTON_POSITIVE);
+            // Override the button click listener to prevent the dialog from closing
+            positiveButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    // Intentionally empty to prevent the dialog from closing
+                }
+            });
+        }
+    }
 
     private void showChangeNicknameDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(ProfileActivity.this);
@@ -270,7 +343,49 @@ public class ProfileActivity extends AppCompatActivity implements OnItemClickLis
 
         builder.show();
     }
+    private void updatePassword(String newPassword) {
+        FirebaseUser firebaseUser = UserManager.getCurrentUser();
+        if (firebaseUser != null) {
+            String email = firebaseUser.getEmail();
+            DatabaseReference usersRef = FirebaseDatabase.getInstance().getReference("users");
 
+            // Query the database to find the user node that matches the email address
+            usersRef.orderByChild("email").equalTo(email).addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    if (dataSnapshot.exists()) {
+                        for (DataSnapshot childSnapshot : dataSnapshot.getChildren()) {
+                            // Update the nickname at this node
+                            childSnapshot.getRef().child("password").setValue(newPassword).addOnCompleteListener(task -> {
+                                if (task.isSuccessful()) {
+                                    // Update the TextView with the new nickname
+                                    nickName_profile.setText(newPassword);
+                                    Log.d("UpdatePassword", "Password updated successfully for email: " + email);
+                                } else {
+                                    // Handle the error, e.g., show a Toast or AlertDialog
+                                    Log.e("UpdateNickname", "Failed to update nickname", task.getException());
+                                    showUpdateNickNameFail();
+                                }
+                            });
+                            break; // Assuming the email is unique, break after finding the first match
+                        }
+                    } else {
+                        Log.e("UpdateNickname", "No user found with email: " + email);
+                        showUpdateNickNameFail();
+                    }
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+                    Log.e("UpdateNickname", "Database error while updating nickname", databaseError.toException());
+                    showUpdateNickNameFail();
+                }
+            });
+        } else {
+            Log.e("UpdateNickname", "FirebaseUser is null");
+            showUpdateNickNameFail();
+        }
+    }
     private void updateNickname(String newNickname) {
         FirebaseUser firebaseUser = UserManager.getCurrentUser();
         if (firebaseUser != null) {
