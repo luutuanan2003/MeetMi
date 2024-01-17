@@ -8,6 +8,8 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -57,10 +59,13 @@ public class postingPost extends AppCompatActivity {
         CaptionField = findViewById(R.id.captionField);
         postButton = findViewById(R.id.postButton);
         backButton  = findViewById(R.id.back_to_mainPP);
+        checkCaptionnotNull();
 
         //load user nickname + avatar
         user_Avatar = findViewById(R.id.userAvatar_postingPost);
         user_Nickname = findViewById(R.id.nickName_postingPost);
+
+        checkCaptionHandler.post(checkCaptionRunnable);
         UserManager.getCurrentUserDetail(new UserCallback() {
             @Override
             public void onCallback(Users user) {
@@ -87,8 +92,6 @@ public class postingPost extends AppCompatActivity {
             }
         });
 
-
-
         postButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -105,6 +108,35 @@ public class postingPost extends AppCompatActivity {
             }
         });
     }
+
+    // destroy the loop in the post for the app to run smoothly
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        checkCaptionHandler.removeCallbacks(checkCaptionRunnable);
+    }
+
+
+    //check for caption to not be null and have the post button appear
+    private Handler checkCaptionHandler = new Handler(Looper.getMainLooper());
+    private Runnable checkCaptionRunnable = new Runnable() {
+        @Override
+        public void run() {
+            checkCaptionnotNull();
+            // Schedule the next execution after a delay
+            checkCaptionHandler.postDelayed(this, 1000); // Check every 1000 milliseconds (1 second)
+        }
+    };
+    public void checkCaptionnotNull() {
+        String caption = CaptionField.getText().toString();
+        if (!caption.equals("")) {
+            setVisible(R.id.postButton, true);
+        } else {
+            setVisible(R.id.postButton, false);
+        }
+    }
+
+
 
 
 
@@ -278,6 +310,15 @@ public class postingPost extends AppCompatActivity {
         Intent intent = new Intent(postingPost.this,ProfileActivity.class);
         startActivity(intent);
         finish();
+    }
+
+
+    private void setVisible(int id, boolean isVisible){
+        View aView = findViewById(id);
+        if (isVisible)
+            aView.setVisibility(View.VISIBLE);
+        else
+            aView.setVisibility(View.INVISIBLE);
     }
 
 }

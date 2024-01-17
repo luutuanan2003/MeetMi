@@ -82,18 +82,19 @@
                 android:layout_height="match_parent" />
 
 
-            <Button
+            <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/set_photoframe_profile"
-                android:layout_width="130dp"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="270dp"
-                android:background="#000000"
+                android:background="#5C000000"
                 android:text="set photo frame"
+                android:textColor="#FFFFFF"
                 app:layout_constraintEnd_toEndOf="@+id/frame_recycle_view"
                 app:layout_constraintStart_toStartOf="@+id/frame_recycle_view"
                 app:layout_constraintTop_toTopOf="@+id/frame_recycle_view">
 
-            </Button>
+            </androidx.appcompat.widget.AppCompatButton>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
