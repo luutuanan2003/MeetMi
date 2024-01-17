@@ -5,12 +5,20 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
@@ -22,19 +30,22 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.storage.UploadTask;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 public class SignupActivity extends AppCompatActivity {
     private static final int PICK_IMAGE_REQUEST = 1;
 
 
     //TODO: need to collect data from the nickname field and the button for the avatar as well
-    private Uri selectedImage;
+    private String selectedImage;
     private EditText usernameField, passwordField, re_enter_passwordField, emailField, nickNameField;
     private Button signupButton;
     private DatabaseReference mDatabase;
+    private StorageReference mStorageRef;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,6 +55,7 @@ public class SignupActivity extends AppCompatActivity {
 
         // Initialize Firebase Database
         mDatabase = FirebaseDatabase.getInstance().getReference();
+        mStorageRef = FirebaseStorage.getInstance().getReference();
 
         // Initialize fields
         nickNameField = findViewById(R.id.nicknameField_SU);
@@ -86,7 +98,8 @@ public class SignupActivity extends AppCompatActivity {
         // Validation here for input values
 
         // Initialize other fields with default or empty values
-        String avatar = selectedImage != null ? selectedImage.toString() : ""; // default or empty
+        String avatar = selectedImage; // default or empty
+        Log.d("Image URL", "image url is " + selectedImage);
         String id = ""; // generate or leave empty
         double latitude = 0; // default value
         double longitude = 0; // default value
@@ -147,14 +160,50 @@ public class SignupActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null && data.getData() != null) {
             Uri imageUri = data.getData();
+            uploadImageToFirebaseStorage(imageUri);
             ImageView photoView = findViewById(R.id.userAvatar_signup);
 //            photoView.setImageURI(imageUri);
-            selectedImage = imageUri;
             Glide.with(this)
                     .load(imageUri)
                     .apply(new RequestOptions().circleCrop())
                     .into(photoView);
 
         }
+    }
+
+    private void uploadImageToFirebaseStorage(Uri imageUri) {
+        if (imageUri != null) {
+            // Create a reference to 'avatars/uniqueId.jpg'
+            StorageReference fileRef = mStorageRef.child("avatars/" + UUID.randomUUID().toString() + ".jpg");
+
+            // Upload the file to Firebase Storage
+            fileRef.putFile(imageUri)
+                    .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                            // Get the download URL
+                            fileRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                                @Override
+                                public void onSuccess(Uri downloadUri) {
+                                    getImageUrl(downloadUri.toString());
+                                }
+                            });
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            // Handle unsuccessful uploads
+                            Toast.makeText(SignupActivity.this, "Upload failed: " + e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
+                        }
+                    });
+        }
+    }
+
+
+
+    private void getImageUrl (String avatarUrl)
+    {
+        selectedImage = avatarUrl;
     }
 }
