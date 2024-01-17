@@ -368,7 +368,6 @@ public class ProfileActivity extends AppCompatActivity implements OnItemClickLis
                             childSnapshot.getRef().child("password").setValue(newPassword).addOnCompleteListener(task -> {
                                 if (task.isSuccessful()) {
                                     // Update the TextView with the new nickname
-                                    nickName_profile.setText(newPassword);
                                     Log.d("UpdatePassword", "Password updated successfully for email: " + email);
                                 } else {
                                     // Handle the error, e.g., show a Toast or AlertDialog
