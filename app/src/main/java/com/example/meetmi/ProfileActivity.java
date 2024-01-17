@@ -15,6 +15,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -31,7 +32,12 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 import com.squareup.picasso.Picasso;
+
+import java.util.UUID;
 
 import ModelClass.Posts;
 import ModelClass.UserCallback;
@@ -46,13 +52,15 @@ public class ProfileActivity extends AppCompatActivity implements OnItemClickLis
     private ImageView change_userAvatar, change_NickName;
     private CircleImageView userAvatar;
     private int photoFrameId;
+    private String selectedImage;
+    private StorageReference mStorageRef;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
         getWindow().setStatusBarColor(Color.parseColor("#1F1F1F"));
 
-
+        mStorageRef = FirebaseStorage.getInstance().getReference();
         change_userAvatar = findViewById(R.id.changeUserAvatarP);
         change_NickName = findViewById(R.id.changeUserNicknameP);
         nickName_profile = findViewById(R.id.nickname_profile);
@@ -169,9 +177,12 @@ public class ProfileActivity extends AppCompatActivity implements OnItemClickLis
 
         if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null && data.getData() != null) {
             Uri imageUri = data.getData();
-            String imageUrl = imageUri.toString();
-            updateAvatar(imageUrl);
+            uploadImageToFirebaseStorage(imageUri);
+
+            updateAvatar(selectedImage);
         }
+
+
     }
 
     private void updateAvatar(String newAvatarUrl) {
@@ -368,6 +379,40 @@ public class ProfileActivity extends AppCompatActivity implements OnItemClickLis
         Intent intent = new Intent(ProfileActivity.this,postingPost.class);
         startActivity(intent);
         finish();
+    }
+
+    private void uploadImageToFirebaseStorage(Uri imageUri) {
+        if (imageUri != null) {
+            // Create a reference to 'avatars/uniqueId.jpg'
+            StorageReference fileRef = mStorageRef.child("avatars/" + UUID.randomUUID().toString() + ".jpg");
+
+            // Upload the file to Firebase Storage
+            fileRef.putFile(imageUri)
+                    .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                            // Get the download URL
+                            fileRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                                @Override
+                                public void onSuccess(Uri downloadUri) {
+                                    getImageUrl(downloadUri.toString());
+                                }
+                            });
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            // Handle unsuccessful uploads
+                            Toast.makeText(ProfileActivity.this, "Upload failed: " + e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
+                        }
+                    });
+        }
+    }
+
+    private void getImageUrl (String avatarUrl)
+    {
+        selectedImage = avatarUrl;
     }
 }
 
