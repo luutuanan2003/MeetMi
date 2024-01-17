@@ -14,6 +14,7 @@ import com.bumptech.glide.Glide;
 import com.example.meetmi.R;
 import java.util.List;
 import ModelClass.Posts;
+import com.squareup.picasso.Picasso;
 
 public class FeedPostAdapter extends RecyclerView.Adapter<FeedPostAdapter.FeedPostViewHolder> {
 
@@ -38,7 +39,8 @@ public class FeedPostAdapter extends RecyclerView.Adapter<FeedPostAdapter.FeedPo
         holder.nicknameTextView.setText(post.getNickname());
         holder.dateTimeTextView.setText(post.getDateTime());
 
-        Glide.with(context).load(post.getAvatar()).into(holder.avatarImageView);
+        // Load image using Picasso
+        Picasso.get().load(post.getAvatar()).into(holder.avatarImageView);
 
         List<String> imageUris = post.getPhoto(); // Assuming Posts class has a method to get photo URIs
         GalleryAdapter2 galleryAdapter = new GalleryAdapter2(context, imageUris);
@@ -47,6 +49,7 @@ public class FeedPostAdapter extends RecyclerView.Adapter<FeedPostAdapter.FeedPo
 
         Log.d("photofromfirebase", "photo" + post.getPhoto());
     }
+
 
     @Override
     public int getItemCount() {
