@@ -188,7 +188,7 @@ public class postingPost extends AppCompatActivity {
     private void post_toFeed() {
         // Initialize your variables here
 
-
+        String keyId = "";
         String caption = CaptionField.getText().toString().trim();
         LocalDateTime now = LocalDateTime.now();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
@@ -208,7 +208,7 @@ public class postingPost extends AppCompatActivity {
                     String avatar = user.getAvatar(); // Assuming getAvatar() method exists
                     String video = user.getEmail(); // Initialize video
                     // Creating post object
-                    Posts post = new Posts(nickname, avatar, imageUrlsString, video, caption, dateTime, comments, reaction);
+                    Posts post = new Posts(nickname,keyId, avatar, imageUrlsString, video, caption, dateTime, comments, reaction);
 
                     // Saving to Firebase
                     mDatabase.child("posts").push().setValue(post);

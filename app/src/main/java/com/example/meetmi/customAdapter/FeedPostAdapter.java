@@ -27,6 +27,7 @@ public class FeedPostAdapter extends RecyclerView.Adapter<FeedPostAdapter.FeedPo
 
     public interface OnPostInteractionListener {
         void onCommentClick(int position);
+        void onReactionClick (int position);
     }
 
     public FeedPostAdapter(Context context, List<Posts> postsList, OnPostInteractionListener listener) {

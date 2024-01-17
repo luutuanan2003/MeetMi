@@ -1,14 +1,15 @@
 package com.example.meetmi;
 
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.content.Intent;
 import android.util.Log;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.ImageView;
 
 import com.example.meetmi.customAdapter.FeedPostAdapter;
@@ -22,6 +23,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
+import ModelClass.Notification;
 import ModelClass.Posts;
 import ModelClass.UserCallback;
 import ModelClass.UserManager;
@@ -93,6 +95,55 @@ public class FeedActivity extends AppCompatActivity implements FeedPostAdapter.O
 
     @Override
     public void onCommentClick(int position) {
+        // Retrieve the post object
+        Posts post = postList.get(position);
+
+        // Create and show the comment dialog
+        AlertDialog.Builder builder = new AlertDialog.Builder(FeedActivity.this);
+        builder.setTitle("Comment What You Think:");
+
+        // Inflate and set the layout for the dialog
+        View dialogView = getLayoutInflater().inflate(R.layout.dialog_comment, null);
+        final EditText commentInput = dialogView.findViewById(R.id.commentSection); // Ensure you have an EditText with this ID in your layout
+        builder.setView(dialogView);
+
+        // Set up the button to submit the comment
+        builder.setPositiveButton("Submit", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                String comment = commentInput.getText().toString().trim();
+                if (!comment.isEmpty()) {
+                    // Add comment to the post's comments section in the Realtime Database
+                    mDatabase.child("posts").child(post.getKeyID()).child("comments").push().setValue(comment);
+
+                    // Create a notification document in the Realtime Database
+                    DatabaseReference notificationRef = mDatabase.child("notifications").push();
+                    notificationRef.setValue(new Notification(
+                            post.getDateTime(), // Use the post's datetime
+                            "1", // isComment
+                            "0", // isReaction
+                            post.getNickname(), // fromUser
+                            post.getAvatar() // userAvatar
+                    ));
+                }
+            }
+        });
+
+        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                dialogInterface.cancel();
+            }
+        });
+
+        builder.show();
+    }
+
+
+    @Override
+    public void onReactionClick(int position) {
 
     }
+
+
 }

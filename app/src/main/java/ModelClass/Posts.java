@@ -3,7 +3,8 @@ package ModelClass;
 import java.util.List;
 
 public class Posts {
-    private String nickname;
+    private String nickname ;
+    private String keyID ;
     private String avatar; // Assuming this is a path or URL to an avatar image
     private List <String> photo;
     private String video; // Optional, could be a path or URL
@@ -15,8 +16,17 @@ public class Posts {
     public Posts() {
     }
 
-    public Posts(String nickname, String avatar, List<String> photo, String video, String caption, String dateTime, List<String> comments, int reaction) {
+    public String getKeyID() {
+        return keyID;
+    }
+
+    public void setKeyID(String keyID) {
+        this.keyID = keyID;
+    }
+
+    public Posts(String nickname, String keyID, String avatar, List<String> photo, String video, String caption, String dateTime, List<String> comments, int reaction) {
         this.nickname = nickname;
+        this.keyID = keyID;
         this.avatar = avatar;
         this.photo = photo;
         this.video = video;

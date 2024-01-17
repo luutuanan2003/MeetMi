@@ -46,7 +46,9 @@ public class UserManager {
                                     if (dataSnapshot.exists()) {
                                         List<Posts> userPosts = new ArrayList<>();
                                         for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
+                                            String id = postSnapshot.getKey();
                                             Posts post = postSnapshot.getValue(Posts.class);
+                                            post.setKeyID(id);
                                             userPosts.add(post);
                                         }
                                         postsCallback.onPostsReceived(userPosts);
