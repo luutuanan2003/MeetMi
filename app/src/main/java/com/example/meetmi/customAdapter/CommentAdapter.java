@@ -10,14 +10,15 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.meetmi.R;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
 public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentViewHolder> {
-    private Map<String, String> commentsList;
+    private List<Map.Entry<String, String>> commentsList;
 
-    public CommentAdapter(Map<String, String> commentsList) {
-        this.commentsList = commentsList;
+    public CommentAdapter(Map<String, String> commentsMap) {
+        this.commentsList = new ArrayList<>(commentsMap.entrySet());
     }
 
     @NonNull
@@ -29,8 +30,8 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
 
     @Override
     public void onBindViewHolder(@NonNull CommentViewHolder holder, int position) {
-        String comment = commentsList.get(position);
-        holder.tvComment.setText(comment);
+        Map.Entry<String, String> commentEntry = commentsList.get(position);
+        holder.tvComment.setText(commentEntry.getValue());
     }
 
     @Override
@@ -47,4 +48,3 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
         }
     }
 }
-
