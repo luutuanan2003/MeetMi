@@ -105,11 +105,8 @@ public class FeedActivity extends AppCompatActivity implements FeedPostAdapter.O
         startActivity(intent);
         finish();
     }
-    public void goto_google_search(View view) {
-        Intent intent = new Intent(FeedActivity.this,SearchActivity.class);
-        startActivity(intent);
-        finish();
-    }
+
+
 
     @Override
     public void onCommentClick(int position) {

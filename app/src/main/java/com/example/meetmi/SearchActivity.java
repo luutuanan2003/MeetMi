@@ -4,14 +4,14 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Toast;
 
 import com.example.meetmi.customAdapter.UsersAdapter;
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -19,22 +19,17 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
-
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
-public class SearchActivity extends AppCompatActivity implements UsersAdapter.OnAddFriendListener {
+public class SearchActivity extends AppCompatActivity {
 
     private DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
     private EditText searchField;
     private Button searchButton;
     private RecyclerView searchResultsRecyclerView;
     private UsersAdapter usersAdapter;
-
-    private List<Map.Entry<String, String>> friends;
-
+    private Button addbutton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,7 +39,8 @@ public class SearchActivity extends AppCompatActivity implements UsersAdapter.On
         searchField = findViewById(R.id.search_field);
         searchButton = findViewById(R.id.search_button);
         searchResultsRecyclerView = findViewById(R.id.search_results_recyclerview);
-        usersAdapter = new UsersAdapter(friends, this, this);
+
+        usersAdapter = new UsersAdapter(this, new ArrayList<>());
         searchResultsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         searchResultsRecyclerView.setAdapter(usersAdapter);
 
@@ -55,6 +51,11 @@ public class SearchActivity extends AppCompatActivity implements UsersAdapter.On
                 if (!searchText.isEmpty()) {
                     searchUsersByNickname(searchText);
                 }
+            }
+
+            public void addbutton(View view) {
+
+
             }
         });
     }
@@ -69,7 +70,7 @@ public class SearchActivity extends AppCompatActivity implements UsersAdapter.On
                     Users user = snapshot.getValue(Users.class);
                     userList.add(user);
                 }
-                usersAdapter.updateData(userList);
+                updateUserList(userList);
             }
 
             @Override
@@ -79,33 +80,24 @@ public class SearchActivity extends AppCompatActivity implements UsersAdapter.On
         });
     }
 
-    @Override
-    public void onAddFriend(Users user) {
-        // Assuming 'user' object contains email and nickname fields
-        String userEmail = user.getEmail();
-        String userNickname = user.getNickname();
+    private void updateUserList(List<Users> userList) {
+        usersAdapter.updateData(userList);
+    }
 
-        // Reference to the Firebase Realtime Database
-        DatabaseReference usersRef = FirebaseDatabase.getInstance().getReference("users");
+    // Function to add a friend's email to the current user's 'friends' list in Firebase
+    public void addFriendEmail(String currentUseremail, String friendEmail) {
+        DatabaseReference userRef = FirebaseDatabase.getInstance().getReference("users");
 
-        // Creating a unique ID for the user (if needed)
-        String userId = usersRef.push().getKey();
-
-        // Creating a HashMap to store user data
-        HashMap<String, String> userData = new HashMap<>();
-        userData.put("email", userEmail);
-        userData.put("nickname", userNickname);
-
-        // Adding or updating the user data in Firebase Realtime Database
-        usersRef.child(userId).setValue(userData)
+        // Assuming 'friends' is a list of emails, if not, this logic will need to be adjusted accordingly.
+        userRef.child(currentUseremail).child("friends").push().setValue(friendEmail)
                 .addOnSuccessListener(aVoid -> {
-                    // Handle success (e.g., display a message)
-                    Toast.makeText(SearchActivity.this, "User added to database", Toast.LENGTH_SHORT).show();
+                    // Friend added successfully, handle this case
+                    Log.d("AddFriend", "Friend email added successfully!");
                 })
                 .addOnFailureListener(e -> {
-                    // Handle failure (e.g., display an error message)
-                    Toast.makeText(SearchActivity.this, "Failed to add user to database", Toast.LENGTH_SHORT).show();
+                    // Failed to add friend, handle this case
+                    Log.d("AddFriend", "Failed to add friend email: " + e.getMessage());
                 });
-}
+    }
 
 }
