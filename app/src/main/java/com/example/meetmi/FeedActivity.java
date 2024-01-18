@@ -1,5 +1,6 @@
 package com.example.meetmi;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.AlertDialog;
@@ -7,6 +8,7 @@ import android.content.DialogInterface;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.content.Intent;
+import android.support.annotation.Nullable;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
@@ -15,8 +17,12 @@ import android.widget.ImageView;
 import com.example.meetmi.customAdapter.CommentAdapter;
 import com.example.meetmi.customAdapter.FeedPostAdapter;
 import com.example.meetmi.customAdapter.PostAdapter;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.MutableData;
+import com.google.firebase.database.Transaction;
 import com.google.firebase.firestore.auth.User;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -134,8 +140,51 @@ public class FeedActivity extends AppCompatActivity implements FeedPostAdapter.O
 
     @Override
     public void onReactionClick(int position) {
+        // Retrieve the post object
+        Posts post = postList.get(position);
 
+        // Show reaction dialog
+        new AlertDialog.Builder(this)
+                .setMessage("Reacted")
+                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        // Increase reaction count
+                        DatabaseReference postRef = mDatabase.child("posts").child(post.getKeyID());
+                        postRef.child("reaction").runTransaction(new Transaction.Handler() {
+                            @NonNull
+                            @Override
+                            public Transaction.Result doTransaction(@NonNull MutableData mutableData) {
+                                Integer currentReactions = mutableData.getValue(Integer.class);
+                                if (currentReactions == null) {
+                                    mutableData.setValue(1);
+                                } else {
+                                    mutableData.setValue(currentReactions + 1);
+                                }
+                                return Transaction.success(mutableData);
+                            }
+
+                            @Override
+                            public void onComplete(@Nullable DatabaseError databaseError, boolean b, @Nullable DataSnapshot dataSnapshot) {
+                                // Create a notification document
+                                String comment  = "";
+                                DatabaseReference notificationRef = mDatabase.child("notifications").push();
+                                notificationRef.setValue(new Notification(
+                                        LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")),
+                                        post.getNickname(),
+                                        post.getUser_Email(), //fromUserEmail
+                                        post.getAvatar(),
+                                        "0", // isComment
+                                        "1", // isReaction
+                                        comment
+                                ));
+                            }
+                        });
+                    }
+                })
+                .show();
     }
+
 
     public void showCommentInputDialog (Posts post)
     {
@@ -178,6 +227,7 @@ public class FeedActivity extends AppCompatActivity implements FeedPostAdapter.O
                 dialogInterface.cancel();
             }
         });
+        builder.show();
     }
 
 }
