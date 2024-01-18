@@ -17,9 +17,14 @@ import java.util.Map;
 public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentViewHolder> {
     private List<Map.Entry<String, String>> commentsList;
 
-    public CommentAdapter(Map<String, String> commentsMap) {
-        this.commentsList = new ArrayList<>(commentsMap.entrySet());
-    }
+
+        public CommentAdapter(Map<String, String> commentsMap) {
+            if (commentsMap != null) {
+                this.commentsList = new ArrayList<>(commentsMap.entrySet());
+            } else {
+                this.commentsList = new ArrayList<>(); // Use an empty list if the map is null
+            }
+        }
 
     @NonNull
     @Override
