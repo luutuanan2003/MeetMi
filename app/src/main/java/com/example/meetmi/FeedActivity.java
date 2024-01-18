@@ -13,6 +13,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.example.meetmi.customAdapter.CommentAdapter;
 import com.example.meetmi.customAdapter.FeedPostAdapter;
@@ -140,50 +141,32 @@ public class FeedActivity extends AppCompatActivity implements FeedPostAdapter.O
 
     @Override
     public void onReactionClick(int position) {
-        // Retrieve the post object
         Posts post = postList.get(position);
-
-        // Show reaction dialog
-        new AlertDialog.Builder(this)
-                .setMessage("Reacted")
-                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        // Increase reaction count
-                        DatabaseReference postRef = mDatabase.child("posts").child(post.getKeyID());
-                        postRef.child("reaction").runTransaction(new Transaction.Handler() {
-                            @NonNull
-                            @Override
-                            public Transaction.Result doTransaction(@NonNull MutableData mutableData) {
-                                Integer currentReactions = mutableData.getValue(Integer.class);
-                                if (currentReactions == null) {
-                                    mutableData.setValue(1);
-                                } else {
-                                    mutableData.setValue(currentReactions + 1);
-                                }
-                                return Transaction.success(mutableData);
-                            }
-
-                            @Override
-                            public void onComplete(@Nullable DatabaseError databaseError, boolean b, @Nullable DataSnapshot dataSnapshot) {
-                                // Create a notification document
-                                String comment  = "";
-                                DatabaseReference notificationRef = mDatabase.child("notifications").push();
-                                notificationRef.setValue(new Notification(
-                                        LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")),
-                                        post.getNickname(),
-                                        post.getUser_Email(), //fromUserEmail
-                                        post.getAvatar(),
-                                        "0", // isComment
-                                        "1", // isReaction
-                                        comment
-                                ));
-                            }
-                        });
-                    }
+        // Assuming 'reaction' is an integer count in your Posts model
+        int newReactionCount = post.getReaction() + 1;
+        mDatabase.child("posts").child(post.getKeyID()).child("reaction").setValue(newReactionCount)
+                .addOnSuccessListener(aVoid -> {
+                    // Reaction count updated successfully, now create a notification
+                    DatabaseReference notificationRef = mDatabase.child("notifications").push();
+                    Notification notification = new Notification(
+                            LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")),
+                            post.getNickname(),
+                            post.getUser_Email(),
+                            post.getAvatar(),
+                            "0", // isComment
+                            "1",  // isReaction
+                            ""    // No comment text for reactions
+                    );
+                    notificationRef.setValue(notification);
+                    // Show a quick confirmation to the user
+                    Toast.makeText(FeedActivity.this, "Reacted!", Toast.LENGTH_SHORT).show();
                 })
-                .show();
+                .addOnFailureListener(e -> {
+                    // Handle the error, e.g. show a toast message
+                    Toast.makeText(FeedActivity.this, "Failed to react!", Toast.LENGTH_SHORT).show();
+                });
     }
+
 
 
     public void showCommentInputDialog (Posts post)
