@@ -33,7 +33,9 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.UploadTask;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 public class SignupActivity extends AppCompatActivity {
@@ -102,7 +104,8 @@ public class SignupActivity extends AppCompatActivity {
         String id = ""; // generate or leave empty
         double latitude = 0; // default value
         double longitude = 0; // default value
-        List<String> friends = new ArrayList<>(); // empty list
+        Map<String, String> friends = new HashMap<>();
+        // empty list
         String photoFrameId = ""; // default or empty
         List<String> newsfeed = new ArrayList<>(); // empty list
 

@@ -11,7 +11,7 @@ public class Users {
     private String id;
     private double latitude;
     private double longitude;
-    private List<String> friends;
+    private Map<String, String>  friends;
     private String photoFrameId;
     private List<String> newsfeed;
     private String nickname;
@@ -21,7 +21,7 @@ public class Users {
         // Default constructor required for Firebase
     }
 
-    public Users(String email, String username, String password, String avatar, String id, double latitude, double longitude, List<String> friends, String photoFrameId, List<String> newsfeed, String nickname) {
+    public Users(String email, String username, String password, String avatar, String id, double latitude, double longitude, Map<String, String> friends, String photoFrameId, List<String> newsfeed, String nickname) {
         this.email = email;
         this.username = username;
         this.password = password;
@@ -92,11 +92,11 @@ public class Users {
         this.longitude = longitude;
     }
 
-    public List<String> getFriends() {
+    public Map<String, String> getFriends() {
         return friends;
     }
 
-    public void setFriends(List<String> friends) {
+    public void setFriends(Map<String, String> friends) {
         this.friends = friends;
     }
 

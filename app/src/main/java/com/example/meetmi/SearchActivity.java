@@ -1,115 +1,111 @@
 package com.example.meetmi;
 
-import androidx.core.app.ActivityCompat;
-import androidx.fragment.app.FragmentActivity;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
-import android.annotation.SuppressLint;
-import android.content.Intent;
-import android.location.Location;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Toast;
 
-import com.google.android.gms.location.FusedLocationProviderClient;
-import com.google.android.gms.location.LocationCallback;
-import com.google.android.gms.location.LocationRequest;
-import com.google.android.gms.location.LocationResult;
-import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.maps.CameraUpdateFactory;
-import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.MarkerOptions;
-import com.example.meetmi.databinding.ActivitySearchBinding;
+import com.example.meetmi.customAdapter.UsersAdapter;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 
-public class SearchActivity extends FragmentActivity implements OnMapReadyCallback {
 
-    private GoogleMap mMap;
-    private Button backButton;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
-    private ActivitySearchBinding binding;
-    protected FusedLocationProviderClient client;
-    protected LocationRequest mLocationRequest;
-    private static final long UPDATE_INTERVAL = 10*1000 ;
-    private static final long FASTEST_INTERVAL = 5000 ;
-    private static final int MY_PERMISSIONS_REQUEST_LOCATION = 99;
+public class SearchActivity extends AppCompatActivity implements UsersAdapter.OnAddFriendListener {
 
+    private DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
+    private EditText searchField;
+    private Button searchButton;
+    private RecyclerView searchResultsRecyclerView;
+    private UsersAdapter usersAdapter;
+
+    private List<Map.Entry<String, String>> friends;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_search);
 
-        binding = ActivitySearchBinding.inflate(getLayoutInflater());
-        setContentView(binding.getRoot());
-        backButton  = findViewById(R.id.back_to_mainPP);
+        searchField = findViewById(R.id.search_field);
+        searchButton = findViewById(R.id.search_button);
+        searchResultsRecyclerView = findViewById(R.id.search_results_recyclerview);
+        usersAdapter = new UsersAdapter(friends, this, this);
+        searchResultsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        searchResultsRecyclerView.setAdapter(usersAdapter);
 
-
-        // Obtain the SupportMapFragment and get notified when the map is ready to be used.
-        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
-                .findFragmentById(R.id.map);
-        mapFragment.getMapAsync(this);
-
-        backButton.setOnClickListener(new View.OnClickListener() {
+        searchButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(SearchActivity.this ,FeedActivity.class);
-                startActivity(intent);
-                finish();
+                String searchText = searchField.getText().toString();
+                if (!searchText.isEmpty()) {
+                    searchUsersByNickname(searchText);
+                }
             }
         });
     }
 
-//    public void getLocation(){
-//        startLocationUpdate();
-//    }
+    private void searchUsersByNickname(String nickname) {
+        Query query = databaseReference.child("users").orderByChild("nickname").equalTo(nickname);
+        query.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                List<Users> userList = new ArrayList<>();
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    Users user = snapshot.getValue(Users.class);
+                    userList.add(user);
+                }
+                usersAdapter.updateData(userList);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                // Handle the error
+            }
+        });
+    }
 
     @Override
-    public void onMapReady(GoogleMap googleMap) {
-        requestPermission();
-        client = LocationServices.getFusedLocationProviderClient(SearchActivity.this);
-        mMap = googleMap;
-        startLocationUpdate();
+    public void onAddFriend(Users user) {
+        // Assuming 'user' object contains email and nickname fields
+        String userEmail = user.getEmail();
+        String userNickname = user.getNickname();
 
+        // Reference to the Firebase Realtime Database
+        DatabaseReference usersRef = FirebaseDatabase.getInstance().getReference("users");
 
+        // Creating a unique ID for the user (if needed)
+        String userId = usersRef.push().getKey();
 
-//
-//        // Add a marker in Sydney and move the camera
-//        LatLng sydney = new LatLng(-34, 151);
-//        mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
-//        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
-    }
+        // Creating a HashMap to store user data
+        HashMap<String, String> userData = new HashMap<>();
+        userData.put("email", userEmail);
+        userData.put("nickname", userNickname);
 
-    private void requestPermission(){
-        ActivityCompat.requestPermissions(SearchActivity.this, new String[]{
-                        android.Manifest.permission.ACCESS_FINE_LOCATION},
-                MY_PERMISSIONS_REQUEST_LOCATION);
-    }
+        // Adding or updating the user data in Firebase Realtime Database
+        usersRef.child(userId).setValue(userData)
+                .addOnSuccessListener(aVoid -> {
+                    // Handle success (e.g., display a message)
+                    Toast.makeText(SearchActivity.this, "User added to database", Toast.LENGTH_SHORT).show();
+                })
+                .addOnFailureListener(e -> {
+                    // Handle failure (e.g., display an error message)
+                    Toast.makeText(SearchActivity.this, "Failed to add user to database", Toast.LENGTH_SHORT).show();
+                });
+}
 
-    @SuppressLint({"MissingPermission", "RestrictedApi"})
-    private void startLocationUpdate(){
-        mLocationRequest = new LocationRequest();
-        mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
-        mLocationRequest.setInterval(UPDATE_INTERVAL);
-        mLocationRequest.setFastestInterval(FASTEST_INTERVAL);
-        client.requestLocationUpdates(mLocationRequest, new LocationCallback() {
-            @Override
-            public void onLocationResult(LocationResult locationResult){
-                onLocationChanged(locationResult.getLastLocation());
-            }
-        }, null);
-    }
-
-    public void onLocationChanged(Location location){
-        String message = "Updated location " +
-                Double.toString(location.getLatitude()) + ", " +
-                Double.toString(location.getLongitude());
-        LatLng newLoc = new LatLng(location.getLatitude(),
-                location.getLongitude());
-        mMap.addMarker(new MarkerOptions().position(newLoc).title("New Location"));
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(newLoc));
-        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
-    }
 }

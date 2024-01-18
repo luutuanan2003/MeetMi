@@ -55,7 +55,7 @@
         android:layout_weight="1"
         android:padding="15dp"
         app:srcCompat="@drawable/search"
-        android:onClick="goto_search"/>
+        android:onClick="goto_google_search"/>
 
     <ImageView
         android:layout_width="30dp"
