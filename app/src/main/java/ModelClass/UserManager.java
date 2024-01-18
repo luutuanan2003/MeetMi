@@ -9,6 +9,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseException;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
@@ -46,10 +47,16 @@ public class UserManager {
                                     if (dataSnapshot.exists()) {
                                         List<Posts> userPosts = new ArrayList<>();
                                         for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
-                                            String id = postSnapshot.getKey();
-                                            Posts post = postSnapshot.getValue(Posts.class);
-                                            post.setKeyID(id);
-                                            userPosts.add(post);
+                                            // Deserialize each child into a Posts object
+                                            try {
+                                                Posts post = postSnapshot.getValue(Posts.class);
+                                                if (post != null) {
+                                                    post.setKeyID(postSnapshot.getKey());
+                                                    userPosts.add(post);
+                                                }
+                                            } catch (DatabaseException e) {
+                                                Log.e("FirebaseCheck", "Error deserializing post", e);
+                                            }
                                         }
                                         postsCallback.onPostsReceived(userPosts);
                                     } else {
@@ -71,6 +78,7 @@ public class UserManager {
             }
         });
     }
+
 
     // Method to get user's details such as email or UID
     public static void getCurrentUserDetail(UserCallback userCallback) {
