@@ -11,7 +11,7 @@
         android:id="@+id/commentSection"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="New Password"
-        android:inputType="textPassword"/>
+        android:hint="Enter Your Comment"
+        android:inputType="text"/>
 
 </LinearLayout>

@@ -1,14 +1,32 @@
 package ModelClass;
 
 public class Notification {
-    private String dateTime, fromUser, fromUserAvatar, isComment, isReaction;
+    private String dateTime, fromUser, fromUserAvatar,fromEmail, isComment, isReaction,commentData;
 
-    public Notification(String dateTime, String fromUser, String fromUserAvatar, String isComment, String isReaction) {
+    public String getFromEmail() {
+        return fromEmail;
+    }
+
+    public void setFromEmail(String fromEmail) {
+        this.fromEmail = fromEmail;
+    }
+
+    public String getCommentData() {
+        return commentData;
+    }
+
+    public void setCommentData(String commentData) {
+        this.commentData = commentData;
+    }
+
+    public Notification(String dateTime, String fromUser, String fromEmail, String fromUserAvatar, String isComment, String isReaction, String commentData) {
         this.dateTime = dateTime;
         this.fromUser = fromUser;
+        this.fromEmail = fromEmail;
         this.fromUserAvatar = fromUserAvatar;
         this.isComment = isComment;
         this.isReaction = isReaction;
+        this.commentData = commentData;
     }
 
     public String getDateTime() {

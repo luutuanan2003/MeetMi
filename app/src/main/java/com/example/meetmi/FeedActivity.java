@@ -12,6 +12,7 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 
+import com.example.meetmi.customAdapter.CommentAdapter;
 import com.example.meetmi.customAdapter.FeedPostAdapter;
 import com.example.meetmi.customAdapter.PostAdapter;
 import com.google.firebase.database.DatabaseReference;
@@ -92,12 +93,52 @@ public class FeedActivity extends AppCompatActivity implements FeedPostAdapter.O
         finish();
     }
 
-
     @Override
     public void onCommentClick(int position) {
         // Retrieve the post object
         Posts post = postList.get(position);
 
+        // Create and show the comments list dialog
+        AlertDialog.Builder builder = new AlertDialog.Builder(FeedActivity.this);
+        builder.setTitle("Comments");
+
+        // Inflate and set the layout for the dialog containing the RecyclerView
+        View dialogView = getLayoutInflater().inflate(R.layout.dialog_comments_list, null);
+        RecyclerView commentsRecyclerView = dialogView.findViewById(R.id.rv_comments); // RecyclerView in your dialog_comments_list.xml
+        // Initialize RecyclerView with a layout manager and adapter (Assuming you have a CommentsAdapter)
+        commentsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        CommentAdapter commentsAdapter = new CommentAdapter(post.getComments()); // pass the comments from the post
+        commentsRecyclerView.setAdapter(commentsAdapter);
+
+        builder.setView(dialogView);
+
+        // "Comment Your Thought" button to show the comment input dialog
+        builder.setPositiveButton("Comment Your Thought", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                showCommentInputDialog(post);
+            }
+        });
+
+        // Cancel button to dismiss the comments list dialog
+        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                dialogInterface.dismiss();
+            }
+        });
+
+        builder.show();
+    }
+
+
+    @Override
+    public void onReactionClick(int position) {
+
+    }
+
+    public void showCommentInputDialog (Posts post)
+    {
         // Create and show the comment dialog
         AlertDialog.Builder builder = new AlertDialog.Builder(FeedActivity.this);
         builder.setTitle("Comment What You Think:");
@@ -121,9 +162,11 @@ public class FeedActivity extends AppCompatActivity implements FeedPostAdapter.O
                     notificationRef.setValue(new Notification(
                             post.getDateTime(), // Use the post's datetime
                             post.getNickname(), // fromUser
+                            post.getUser_Email(), //fromUserEmail
                             post.getAvatar(), // userAvatar
                             "1", // isComment
-                            "0" // isReaction
+                            "0", // isReaction
+                            comment
                     ));
                 }
             }
@@ -135,15 +178,6 @@ public class FeedActivity extends AppCompatActivity implements FeedPostAdapter.O
                 dialogInterface.cancel();
             }
         });
-
-        builder.show();
     }
-
-
-    @Override
-    public void onReactionClick(int position) {
-
-    }
-
 
 }

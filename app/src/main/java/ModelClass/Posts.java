@@ -8,7 +8,7 @@ public class Posts {
     private String keyID ;
     private String avatar; // Assuming this is a path or URL to an avatar image
     private List <String> photo;
-    private String video; // Optional, could be a path or URL
+    private String user_Email; // Optional, could be a path or URL
     private String caption;
     private String dateTime; // Typically, this would be a Date or LocalDateTime object
     private Map<String, String> comments; // Assuming this is aggregated or serialized comments
@@ -25,12 +25,12 @@ public class Posts {
         this.keyID = keyID;
     }
 
-    public Posts(String nickname, String keyID, String avatar, List<String> photo, String video, String caption, String dateTime, Map<String, String> comments, int reaction) {
+    public Posts(String nickname, String keyID, String avatar, List<String> photo, String user_Email, String caption, String dateTime, Map<String, String> comments, int reaction) {
         this.nickname = nickname;
         this.keyID = keyID;
         this.avatar = avatar;
         this.photo = photo;
-        this.video = video;
+        this.user_Email = user_Email;
         this.caption = caption.toString();
         this.dateTime = dateTime;
         this.comments = comments;
@@ -62,13 +62,14 @@ public class Posts {
         this.photo = photo;
     }
 
-    public String getVideo() {
-        return video;
+    public String getUser_Email() {
+        return user_Email;
     }
 
-    public void setVideo(String video) {
-        this.video = video;
+    public void setUser_Email(String user_Email) {
+        this.user_Email = user_Email;
     }
+
     public String getCaption() {
         return caption;
     }
