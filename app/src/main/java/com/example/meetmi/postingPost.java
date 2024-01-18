@@ -30,7 +30,9 @@ import com.squareup.picasso.Picasso;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 import ModelClass.Posts;
@@ -195,8 +197,7 @@ public class postingPost extends AppCompatActivity {
         String dateTime = now.format(formatter);
 
         // Initialize other required fields
-        List<String> comments = new ArrayList<>();
-        comments.add("");
+        Map<String, String> comments = new HashMap<>();
         int reaction = 0;
 
         UserManager.getCurrentUserDetail(new UserCallback() {

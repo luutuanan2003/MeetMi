@@ -1,6 +1,7 @@
 package ModelClass;
 
 import java.util.List;
+import java.util.Map;
 
 public class Posts {
     private String nickname ;
@@ -10,7 +11,7 @@ public class Posts {
     private String video; // Optional, could be a path or URL
     private String caption;
     private String dateTime; // Typically, this would be a Date or LocalDateTime object
-    private List<String> comments; // Assuming this is aggregated or serialized comments
+    private Map<String, String> comments; // Assuming this is aggregated or serialized comments
     private int reaction; // Default null, could be an enum or string
 
     public Posts() {
@@ -24,7 +25,7 @@ public class Posts {
         this.keyID = keyID;
     }
 
-    public Posts(String nickname, String keyID, String avatar, List<String> photo, String video, String caption, String dateTime, List<String> comments, int reaction) {
+    public Posts(String nickname, String keyID, String avatar, List<String> photo, String video, String caption, String dateTime, Map<String, String> comments, int reaction) {
         this.nickname = nickname;
         this.keyID = keyID;
         this.avatar = avatar;
@@ -85,11 +86,11 @@ public class Posts {
     }
 
 
-    public List<String> getComments() {
+    public Map<String, String> getComments() {
         return comments;
     }
 
-    public void setComments(List<String> comments) {
+    public void setComments(Map<String, String> comments) {
         this.comments = comments;
     }
 

@@ -120,10 +120,10 @@ public class FeedActivity extends AppCompatActivity implements FeedPostAdapter.O
                     DatabaseReference notificationRef = mDatabase.child("notifications").push();
                     notificationRef.setValue(new Notification(
                             post.getDateTime(), // Use the post's datetime
-                            "1", // isComment
-                            "0", // isReaction
                             post.getNickname(), // fromUser
-                            post.getAvatar() // userAvatar
+                            post.getAvatar(), // userAvatar
+                            "1", // isComment
+                            "0" // isReaction
                     ));
                 }
             }
