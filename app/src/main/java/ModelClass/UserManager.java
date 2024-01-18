@@ -40,7 +40,7 @@ public class UserManager {
                 if (user != null) {
                     // If user is found, use the email to retrieve posts
                     DatabaseReference postsRef = FirebaseDatabase.getInstance().getReference("posts");
-                    postsRef.orderByChild("video").equalTo(user.getEmail())
+                    postsRef.orderByChild("user_Email").equalTo(user.getEmail())
                             .addListenerForSingleValueEvent(new ValueEventListener() {
                                 @Override
                                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {

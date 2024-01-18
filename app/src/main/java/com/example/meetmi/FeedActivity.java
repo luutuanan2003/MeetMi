@@ -29,7 +29,9 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import ModelClass.Notification;
 import ModelClass.Posts;
@@ -104,6 +106,11 @@ public class FeedActivity extends AppCompatActivity implements FeedPostAdapter.O
     public void onCommentClick(int position) {
         // Retrieve the post object
         Posts post = postList.get(position);
+
+        Map<String, String> commentss = post.getComments();
+        if (commentss == null) {
+            commentss = new HashMap<>(); // Initialize to empty if null
+        }
 
         // Create and show the comments list dialog
         AlertDialog.Builder builder = new AlertDialog.Builder(FeedActivity.this);
