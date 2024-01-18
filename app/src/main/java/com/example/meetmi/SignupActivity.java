@@ -40,7 +40,6 @@ public class SignupActivity extends AppCompatActivity {
     private static final int PICK_IMAGE_REQUEST = 1;
 
 
-    //TODO: need to collect data from the nickname field and the button for the avatar as well
     private String selectedImage;
     private EditText usernameField, passwordField, re_enter_passwordField, emailField, nickNameField;
     private Button signupButton;

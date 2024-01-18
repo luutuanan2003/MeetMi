@@ -92,6 +92,13 @@ public class FeedActivity extends AppCompatActivity implements FeedPostAdapter.O
         finish();
     }
 
+    public void goto_search(View view) {
+        Intent intent = new Intent(FeedActivity.this,SearchActivity.class);
+        startActivity(intent);
+        finish();
+    }
+
+
 
     @Override
     public void onCommentClick(int position) {
@@ -142,6 +149,10 @@ public class FeedActivity extends AppCompatActivity implements FeedPostAdapter.O
 
     @Override
     public void onReactionClick(int position) {
+        //when the reaction button is clicked
+        // the star will appear to be yellow
+        ImageView imageView = findViewById(R.id.reactionB);
+        imageView.setImageResource(R.drawable.star_yellow);
 
     }
 
