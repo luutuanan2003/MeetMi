@@ -30,6 +30,7 @@ public class FeedPostAdapter extends RecyclerView.Adapter<FeedPostAdapter.FeedPo
         void onReactionClick (int position);
     }
 
+
     public FeedPostAdapter(Context context, List<Posts> postsList, OnPostInteractionListener listener) {
         this.context = context;
         this.postsList = postsList;
@@ -41,6 +42,8 @@ public class FeedPostAdapter extends RecyclerView.Adapter<FeedPostAdapter.FeedPo
         View view = LayoutInflater.from(context).inflate(R.layout.list_item_post, parent, false);
         return new FeedPostViewHolder(view);
     }
+
+
 
     @Override
     public void onBindViewHolder(FeedPostViewHolder holder, int position) {
@@ -56,7 +59,7 @@ public class FeedPostAdapter extends RecyclerView.Adapter<FeedPostAdapter.FeedPo
         GalleryAdapter2 galleryAdapter = new GalleryAdapter2(context, imageUris);
         holder.galleryRecyclerView.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false));
         holder.galleryRecyclerView.setAdapter(galleryAdapter);
-        //set up comment
+
         holder.commentImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -70,10 +73,11 @@ public class FeedPostAdapter extends RecyclerView.Adapter<FeedPostAdapter.FeedPo
             @Override
             public void onClick(View v) {
                 if (listener != null) {
-                    listener.onCommentClick(holder.getAdapterPosition());
+                    listener.onReactionClick(holder.getAdapterPosition());
                 }
             }
         });
+
         Log.d("photofromfirebase", "photo" + post.getPhoto());
     }
 
