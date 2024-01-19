@@ -1,5 +1,6 @@
 package com.example.meetmi;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -8,11 +9,13 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Button;
 import android.widget.Toast;
 
+import com.example.meetmi.customAdapter.FriendsAdapter;
 import com.example.meetmi.customAdapter.UsersAdapter;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -28,6 +31,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class SearchActivity extends AppCompatActivity implements UsersAdapter.OnItemClickListener {
 
@@ -39,6 +43,9 @@ public class SearchActivity extends AppCompatActivity implements UsersAdapter.On
     private String loggedInEmail;
     private List<Users> userList = new ArrayList<>();
     private String currentusername;
+
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -136,6 +143,38 @@ public class SearchActivity extends AppCompatActivity implements UsersAdapter.On
                     }
                 });
     }
+
+    public void showFriendsDialog(View view) {
+        UserManager.getCurrentUserDetail(new UserCallback() {
+            @Override
+            public void onCallback(Users currentUser) {
+                if (currentUser != null) {
+                    List<String> friendsList = new ArrayList<>(currentUser.getFriends().keySet());
+                    showFriendsListDialog(friendsList);
+                } else {
+                    Toast.makeText(SearchActivity.this, "You have no friends added.", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+    }
+    private void showFriendsListDialog(List<String> friendsList) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        LayoutInflater inflater = getLayoutInflater();
+        View dialogView = inflater.inflate(R.layout.dialog_friends_list, null);
+        RecyclerView recyclerView = dialogView.findViewById(R.id.rv_friends_list);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        FriendsAdapter adapter = new FriendsAdapter(friendsList);
+        recyclerView.setAdapter(adapter);
+
+        builder.setView(dialogView)
+                .setPositiveButton("Close", (dialog, id) -> dialog.dismiss());
+
+        AlertDialog dialog = builder.create();
+        dialog.show();
+    }
+
+
+
 
     public void backtomain(View view) {
         Intent intent = new Intent(SearchActivity.this,FeedActivity.class);
