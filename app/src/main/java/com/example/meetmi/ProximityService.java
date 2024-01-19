@@ -31,7 +31,7 @@ public class ProximityService extends Service {
     @Override
     public void onCreate() {
         super.onCreate();
-        Log.d(TAG, "Service Created");
+        Log.d("Street Pass", "Service Created");
 
         databaseReference = FirebaseDatabase.getInstance().getReference();
 
