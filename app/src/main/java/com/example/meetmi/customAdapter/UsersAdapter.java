@@ -4,6 +4,7 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -18,11 +19,12 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.UserViewHold
 
     private List<Users> userList;
     private LayoutInflater inflater;
-    public TextView nicknameTextView;
-    public TextView emailTextView;
-    public UsersAdapter(Context context, List<Users> userList) {
+    private OnItemClickListener listener;
+
+    public UsersAdapter(Context context, List<Users> userList, OnItemClickListener listener) {
         this.inflater = LayoutInflater.from(context);
         this.userList = userList;
+        this.listener = listener;
     }
 
     @NonNull
@@ -36,14 +38,13 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.UserViewHold
     public void onBindViewHolder(@NonNull UserViewHolder holder, int position) {
         Users currentUser = userList.get(position);
         holder.bindTo(currentUser);
-    }
 
-    public TextView getNicknameTextView() {
-        return nicknameTextView;
-    }
-
-    public TextView getEmailTextView() {
-        return emailTextView;
+        holder.addButton.setOnClickListener(v -> {
+            String friendUsername = currentUser.getUsername(); // Use username
+            if (listener != null) {
+                listener.onAddFriendClicked(friendUsername);
+            }
+        });
     }
 
     @Override
@@ -57,12 +58,15 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.UserViewHold
     }
 
     class UserViewHolder extends RecyclerView.ViewHolder {
-
+        TextView nicknameTextView;
+        TextView emailTextView;
+        Button addButton;
 
         public UserViewHolder(View itemView) {
             super(itemView);
             nicknameTextView = itemView.findViewById(R.id.nickname_text_view);
             emailTextView = itemView.findViewById(R.id.email_text_view);
+            addButton = itemView.findViewById(R.id.add_friend_button);
         }
 
         void bindTo(Users currentUser) {
@@ -70,4 +74,10 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.UserViewHold
             emailTextView.setText(currentUser.getEmail());
         }
     }
+
+    public interface OnItemClickListener {
+        void onAddFriendClicked(String friendUsername);
+    }
+
+    
 }
