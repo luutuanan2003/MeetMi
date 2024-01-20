@@ -65,15 +65,22 @@ public class ProximityService extends Service {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 for (DataSnapshot userSnapshot : dataSnapshot.getChildren()) {
-                    double userLat = userSnapshot.child("latitude").getValue(Double.class);
-                    double userLon = userSnapshot.child("longitude").getValue(Double.class);
+                    Double userLat = userSnapshot.child("latitude").getValue(Double.class);
+                    Double userLon = userSnapshot.child("longitude").getValue(Double.class);
+
+                    // Check if either latitude or longitude is null
+                    if (userLat == null || userLon == null) {
+                        Log.d(TAG, "Latitude or Longitude is missing for user: " + userSnapshot.getKey());
+                        continue; // Skip this userSnapshot and move to the next one
+                    }
+
                     Location userLocation = new Location("");
                     userLocation.setLatitude(userLat);
                     userLocation.setLongitude(userLon);
 
                     float distance = currentLocation.distanceTo(userLocation);
                     if (distance < PROXIMITY_RADIUS) {
-                        Log.d("StressPass", "Nearby user found: " + userSnapshot.getKey());
+                        Log.d("Street Pass", "Nearby user found: " + userSnapshot.getKey());
                         triggerNotification(userSnapshot.getKey());
                     }
                 }
@@ -85,6 +92,7 @@ public class ProximityService extends Service {
             }
         });
     }
+
 
     private void triggerNotification(String userId) {
         // Sample Notification Code
