@@ -78,7 +78,7 @@ public class postingPost extends AppCompatActivity {
         user_Nickname = findViewById(R.id.nickName_postingPost);
 
         checkCaptionHandler.post(checkCaptionRunnable);
-        UserManager.getCurrentUserDetail(new UserCallback() {
+        UserManager.getCurrentUserDetail(new UserManager.UserCallback() {
             @Override
             public void onCallback(Users user) {
                 if (user != null) {
@@ -200,7 +200,7 @@ public class postingPost extends AppCompatActivity {
         Map<String, String> comments = new HashMap<>();
         int reaction = 0;
 
-        UserManager.getCurrentUserDetail(new UserCallback() {
+        UserManager.getCurrentUserDetail(new UserManager.UserCallback() {
             @Override
             public void onCallback(Users user) {
                 if (user != null) {

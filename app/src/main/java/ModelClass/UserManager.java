@@ -25,7 +25,11 @@ public class UserManager {
         FirebaseAuth mAuth = FirebaseAuth.getInstance();
         return mAuth.getCurrentUser();
     }
-    //method to retrieve post
+
+    public interface UserCallback {
+        void onCallback(Users user);
+    }
+
     // Callback interface for handling the retrieved posts
     public interface PostsCallback {
         void onPostsReceived(List<Posts> posts);

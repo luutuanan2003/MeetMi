@@ -136,9 +136,24 @@ public class FeedActivity extends AppCompatActivity implements FeedPostAdapter.O
         builder.setPositiveButton("Comment Your Thought", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-                showCommentInputDialog(post);
+                UserManager.getCurrentUserDetail(new UserManager.UserCallback() {
+                    @Override
+                    public void onCallback(Users user) {
+                        if (user != null) {
+                            // Now you have the user's details, including nickname
+                            String currentUserNickname = user.getNickname();
+
+                            // Proceed to show the comments dialog with the fetched nickname
+                            showCommentInputDialog(post, currentUserNickname);
+                        } else {
+                            // Handle the case where user details are not found
+                            Toast.makeText(FeedActivity.this, "User details not found.", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
             }
         });
+
 
         // Cancel button to dismiss the comments list dialog
         builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -194,15 +209,14 @@ public class FeedActivity extends AppCompatActivity implements FeedPostAdapter.O
 
 
 
-    public void showCommentInputDialog (Posts post)
-    {
+    public void showCommentInputDialog(Posts post, String currentUserNickname) {
         // Create and show the comment dialog
         AlertDialog.Builder builder = new AlertDialog.Builder(FeedActivity.this);
         builder.setTitle("Comment What You Think:");
 
         // Inflate and set the layout for the dialog
         View dialogView = getLayoutInflater().inflate(R.layout.dialog_comment, null);
-        final EditText commentInput = dialogView.findViewById(R.id.commentSection); // Ensure you have an EditText with this ID in your layout
+        final EditText commentInput = dialogView.findViewById(R.id.commentSection);
         builder.setView(dialogView);
 
         // Set up the button to submit the comment
@@ -212,15 +226,16 @@ public class FeedActivity extends AppCompatActivity implements FeedPostAdapter.O
                 String comment = commentInput.getText().toString().trim();
                 if (!comment.isEmpty()) {
                     // Add comment to the post's comments section in the Realtime Database
-                    mDatabase.child("posts").child(post.getKeyID()).child("comments").push().setValue(comment);
+                    mDatabase.child("posts").child(post.getKeyID()).child("comments")
+                            .child(currentUserNickname).setValue(comment);
 
                     // Create a notification document in the Realtime Database
                     DatabaseReference notificationRef = mDatabase.child("notifications").push();
                     notificationRef.setValue(new Notification(
-                            post.getDateTime(), // Use the post's datetime
-                            post.getNickname(), // fromUser
-                            post.getUser_Email(), //fromUserEmail
-                            post.getAvatar(), // userAvatar
+                            post.getDateTime(),
+                            post.getNickname(),
+                            post.getUser_Email(),
+                            post.getAvatar(),
                             "1", // isComment
                             "0", // isReaction
                             comment
@@ -235,6 +250,7 @@ public class FeedActivity extends AppCompatActivity implements FeedPostAdapter.O
                 dialogInterface.cancel();
             }
         });
+
         builder.show();
     }
 
