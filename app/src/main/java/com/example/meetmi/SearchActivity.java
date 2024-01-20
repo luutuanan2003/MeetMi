@@ -92,7 +92,7 @@ public class SearchActivity extends AppCompatActivity implements UsersAdapter.On
     }
 
     private void getCurrentLoggedInEmail() {
-        UserManager.getCurrentUserDetail(new UserCallback() {
+        UserManager.getCurrentUserDetail(new UserManager.UserCallback() {
             @Override
             public void onCallback(Users user) {
                 if (user != null) {
@@ -145,7 +145,7 @@ public class SearchActivity extends AppCompatActivity implements UsersAdapter.On
     }
 
     public void showFriendsDialog(View view) {
-        UserManager.getCurrentUserDetail(new UserCallback() {
+        UserManager.getCurrentUserDetail(new UserManager.UserCallback() {
             @Override
             public void onCallback(Users currentUser) {
                 if (currentUser != null) {

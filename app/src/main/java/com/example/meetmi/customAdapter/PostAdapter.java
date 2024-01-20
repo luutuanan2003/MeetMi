@@ -74,7 +74,7 @@ public class PostAdapter extends BaseAdapter {
         }
 
         // what is this for?
-        UserManager.getCurrentUserDetail(new UserCallback() {
+        UserManager.getCurrentUserDetail(new UserManager.UserCallback() {
             @Override
             public void onCallback(Users user) {
                 if (user != null) {

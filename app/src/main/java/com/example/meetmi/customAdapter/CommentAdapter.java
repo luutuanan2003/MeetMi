@@ -18,6 +18,7 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
     private List<Map.Entry<String, String>> commentsList;
 
 
+
         public CommentAdapter(Map<String, String> commentsMap) {
             if (commentsMap != null) {
                 this.commentsList = new ArrayList<>(commentsMap.entrySet());

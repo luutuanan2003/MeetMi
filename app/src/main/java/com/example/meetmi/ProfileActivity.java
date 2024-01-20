@@ -105,7 +105,7 @@ public class ProfileActivity extends AppCompatActivity implements OnItemClickLis
 
         //set user nickName + avatar
         mDatabase = FirebaseDatabase.getInstance().getReference();
-        UserManager.getCurrentUserDetail(new UserCallback() {
+        UserManager.getCurrentUserDetail(new UserManager.UserCallback() {
             @Override
             public void onCallback(Users user) {
                 if (user != null) {
