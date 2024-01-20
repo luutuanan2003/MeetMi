@@ -226,8 +226,10 @@ public class FeedActivity extends AppCompatActivity implements FeedPostAdapter.O
                 String comment = commentInput.getText().toString().trim();
                 if (!comment.isEmpty()) {
                     // Add comment to the post's comments section in the Realtime Database
+                    
                     mDatabase.child("posts").child(post.getKeyID()).child("comments")
-                            .child(currentUserNickname).setValue(comment);
+                            .push().setValue(currentUserNickname + ": " + comment);
+
 
                     // Create a notification document in the Realtime Database
                     DatabaseReference notificationRef = mDatabase.child("notifications").push();

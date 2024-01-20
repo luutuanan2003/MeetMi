@@ -37,9 +37,8 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
     @Override
     public void onBindViewHolder(@NonNull CommentViewHolder holder, int position) {
         Map.Entry<String, String> commentEntry = commentsList.get(position);
-        String commenter = commentEntry.getKey(); // Get the key representing the commenter's nickname
         String comment = commentEntry.getValue(); // Get the value representing the comment text
-        holder.tvComment.setText(commenter + ": " + comment); // Display both in the TextView
+        holder.tvComment.setText(comment); // Display both in the TextView
     }
 
 
