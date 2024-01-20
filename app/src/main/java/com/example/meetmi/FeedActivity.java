@@ -200,6 +200,7 @@ public class FeedActivity extends AppCompatActivity implements FeedPostAdapter.O
                         "",
                         post.getUser_Email()
                 ));
+                Log.d("CheckUserEmail" , post.getUser_Email());
 
                 // Notify the user that the reaction has been recorded
                 Toast.makeText(FeedActivity.this, "Reacted!", Toast.LENGTH_SHORT).show();
@@ -244,6 +245,7 @@ public class FeedActivity extends AppCompatActivity implements FeedPostAdapter.O
                             comment,
                             post.getUser_Email()
                     ));
+                    Log.d("CheckUserEmail" , post.getUser_Email());
                 }
             }
         });
