@@ -13,6 +13,7 @@ import com.example.meetmi.Users;
 
 import java.util.List;
 
+import ModelClass.Notification;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 import android.app.AlertDialog;
@@ -24,24 +25,24 @@ import com.google.firebase.database.FirebaseDatabase;
 import ModelClass.UserManager;
 
 public class NotificationAdapter extends BaseAdapter {
-    private List<Users> users;
+    private List<Notification> notificationLists;
     private LayoutInflater inflater;
     private Context context;
 
-    public NotificationAdapter(Context context, List<Users> users) {
-        this.users = users;
+    public NotificationAdapter(Context context, List<Notification> notificationLists) {
+        this.notificationLists = notificationLists;
         this.inflater = LayoutInflater.from(context);
         this.context = context;
     }
 
     @Override
     public int getCount() {
-        return users.size();
+        return notificationLists.size();
     }
 
     @Override
     public Object getItem(int position) {
-        return users.get(position);
+        return notificationLists.get(position);
     }
 
     @Override

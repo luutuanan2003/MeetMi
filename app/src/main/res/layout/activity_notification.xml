@@ -22,7 +22,7 @@
             android:textSize="30dp" />
 
         <ListView
-            android:id="@+id/notiRecyclerView"
+            android:id="@+id/notiListView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_margin="15dp" />

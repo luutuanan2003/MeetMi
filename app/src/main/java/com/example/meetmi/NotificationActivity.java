@@ -1,17 +1,33 @@
 package com.example.meetmi;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.graphics.Color;
 import android.os.Bundle;
 import android.content.Intent;
 import android.view.View;
+import android.widget.ImageView;
+import android.widget.ListView;
+
+import com.example.meetmi.customAdapter.FeedPostAdapter;
+import com.example.meetmi.customAdapter.NotificationAdapter;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import ModelClass.Notification;
+import ModelClass.Posts;
+import ModelClass.UserManager;
 
 
 public class NotificationActivity extends AppCompatActivity {
-//    private ListView listView;
-//    private UserAdapter adapter;
-//    private List<Users> userList;
+    private DatabaseReference mDatabase;
+    private NotificationAdapter NotiAdapter;
+    private List<Notification> notiList = new ArrayList<>();
+    private ListView notiListView ;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -19,6 +35,25 @@ public class NotificationActivity extends AppCompatActivity {
         setContentView(R.layout.activity_notification);
         getWindow().setStatusBarColor(Color.parseColor("#1F1F1F"));
 
+        mDatabase = FirebaseDatabase.getInstance().getReference();
+
+        NotiAdapter = new NotificationAdapter(this,notiList);
+        notiListView = findViewById(R.id.notiListView);
+        notiListView.setAdapter(NotiAdapter);
+
+        UserManager.getCurrentUserNotifications(new UserManager.NotificationCallback() {
+            @Override
+            public void onNotificationsReceived(List<Notification> notifications) {
+                notiList.clear();
+                notiList.addAll(notifications);
+                NotiAdapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onError(String error) {
+
+            }
+        });
 //        the flow of the notification list
 //        listView = findViewById(R.id.listView);
 //
