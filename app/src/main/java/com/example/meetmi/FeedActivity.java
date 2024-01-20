@@ -197,7 +197,8 @@ public class FeedActivity extends AppCompatActivity implements FeedPostAdapter.O
                         post.getAvatar(),
                         "0", // isComment
                         "1" , // isReaction
-                        ""
+                        "",
+                        post.getUser_Email()
                 ));
 
                 // Notify the user that the reaction has been recorded
@@ -226,7 +227,7 @@ public class FeedActivity extends AppCompatActivity implements FeedPostAdapter.O
                 String comment = commentInput.getText().toString().trim();
                 if (!comment.isEmpty()) {
                     // Add comment to the post's comments section in the Realtime Database
-                    
+
                     mDatabase.child("posts").child(post.getKeyID()).child("comments")
                             .push().setValue(currentUserNickname + ": " + comment);
 
@@ -240,7 +241,8 @@ public class FeedActivity extends AppCompatActivity implements FeedPostAdapter.O
                             post.getAvatar(),
                             "1", // isComment
                             "0", // isReaction
-                            comment
+                            comment,
+                            post.getUser_Email()
                     ));
                 }
             }

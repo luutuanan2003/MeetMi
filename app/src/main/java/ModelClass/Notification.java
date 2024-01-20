@@ -1,7 +1,7 @@
 package ModelClass;
 
 public class Notification {
-    private String dateTime, fromUser, fromUserAvatar,fromEmail, isComment, isReaction,commentData;
+    private String dateTime, fromUser, fromUserAvatar,fromEmail, isComment, isReaction,commentData,forUser;
 
     public String getFromEmail() {
         return fromEmail;
@@ -19,7 +19,7 @@ public class Notification {
         this.commentData = commentData;
     }
 
-    public Notification(String dateTime, String fromUser, String fromEmail, String fromUserAvatar, String isComment, String isReaction, String commentData) {
+    public Notification(String dateTime, String fromUser, String fromEmail, String fromUserAvatar, String isComment, String isReaction, String commentData, String forUser) {
         this.dateTime = dateTime;
         this.fromUser = fromUser;
         this.fromEmail = fromEmail;
@@ -27,6 +27,7 @@ public class Notification {
         this.isComment = isComment;
         this.isReaction = isReaction;
         this.commentData = commentData;
+        this.forUser = forUser;
     }
 
     public String getDateTime() {
