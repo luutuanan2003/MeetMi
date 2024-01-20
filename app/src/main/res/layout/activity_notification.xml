@@ -21,8 +21,8 @@
             android:textColor="#FFFFFF"
             android:textSize="30dp" />
 
-        <ListView
-            android:id="@+id/notiListView"
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/notiRecyclerView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_margin="15dp" />

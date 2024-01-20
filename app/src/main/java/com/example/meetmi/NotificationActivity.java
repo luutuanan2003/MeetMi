@@ -25,9 +25,9 @@ import ModelClass.UserManager;
 
 public class NotificationActivity extends AppCompatActivity {
     private DatabaseReference mDatabase;
+    private RecyclerView notiRecyclerView;
     private NotificationAdapter NotiAdapter;
     private List<Notification> notiList = new ArrayList<>();
-    private ListView notiListView ;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,10 +36,9 @@ public class NotificationActivity extends AppCompatActivity {
         getWindow().setStatusBarColor(Color.parseColor("#1F1F1F"));
 
         mDatabase = FirebaseDatabase.getInstance().getReference();
-
+        notiRecyclerView = findViewById(R.id.notiRecyclerView);
         NotiAdapter = new NotificationAdapter(this,notiList);
-        notiListView = findViewById(R.id.notiListView);
-        notiListView.setAdapter(NotiAdapter);
+        notiRecyclerView.setAdapter(NotiAdapter);
 
         UserManager.getCurrentUserNotifications(new UserManager.NotificationCallback() {
             @Override
