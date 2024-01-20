@@ -48,7 +48,7 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
     public void onBindViewHolder(NotiViewHolder holder, int position) {
         Notification noti = notificationLists.get(position);
 
-        if (noti.getIsComment() ==  "1") {
+        if (noti.getIsComment().toString().equals("1")) {
             holder.notitype.setText("Someone just commented on your post");
         } else {
             holder.notitype.setText("Someone just liked on your post");

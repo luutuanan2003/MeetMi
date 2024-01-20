@@ -1,6 +1,7 @@
 package com.example.meetmi;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.graphics.Color;
@@ -37,6 +38,7 @@ public class NotificationActivity extends AppCompatActivity {
 
         mDatabase = FirebaseDatabase.getInstance().getReference();
         notiRecyclerView = findViewById(R.id.notiRecyclerView);
+        notiRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         NotiAdapter = new NotificationAdapter(this,notiList);
         notiRecyclerView.setAdapter(NotiAdapter);
 

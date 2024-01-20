@@ -23,6 +23,7 @@
             android:layout_marginLeft="10dp"
             android:fontFamily="sans-serif-medium"
             android:text="User Name"
+            android:textColor="#FFFFFF"
             android:textSize="18sp" />
 
         <TextView
@@ -32,6 +33,7 @@
             android:layout_marginLeft="10dp"
             android:fontFamily="sans-serif-light"
             android:text="User Notification"
+            android:textColor="#FFFFFF"
             android:textSize="18sp" />
     </LinearLayout>
 
