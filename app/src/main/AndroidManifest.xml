@@ -36,10 +36,7 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyB6yc8k_-p8QA3Up8W0vyztFRfqcPCwpLQ" />
 
-        <activity
-            android:name=".GoogleSearch"
-            android:exported="false"
-            android:label="@string/title_activity_search" />
+
         <activity
             android:name=".postingPost"
             android:exported="false" />

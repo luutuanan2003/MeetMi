@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.content.Intent;
@@ -37,11 +38,16 @@ import ModelClass.Notification;
 import ModelClass.Posts;
 import ModelClass.UserCallback;
 import ModelClass.UserManager;
+
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import android.Manifest;
 
 
 public class FeedActivity extends AppCompatActivity implements FeedPostAdapter.OnPostInteractionListener {
+    private static final int REQUEST_LOCATION_PERMISSION = 1;
 
     private DatabaseReference mDatabase;
     private RecyclerView postsRecyclerView;
@@ -78,9 +84,41 @@ public class FeedActivity extends AppCompatActivity implements FeedPostAdapter.O
                 Log.e("FirebaseCheck", error);
             }
         });
+        checkLocationPermissionAndStartService();
 
+    }
 
+    private void checkLocationPermissionAndStartService() {
+        if (ContextCompat.checkSelfPermission(this,
+                Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // Permission is not granted, request it
+            ActivityCompat.requestPermissions(this,
+                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                    REQUEST_LOCATION_PERMISSION);
+        } else {
+            // Permission is granted, start the service
+            startProximityService();
+        }
+    }
 
+    @Override
+    public void onRequestPermissionsResult(int requestCode,
+                                           @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == REQUEST_LOCATION_PERMISSION) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                // Permission was granted, start the service
+                startProximityService();
+            } else {
+                // Permission denied, handle the case (e.g., show a message to the user)
+                Toast.makeText(this, "Location permission is required for this feature", Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+    private void startProximityService() {
+        Intent serviceIntent = new Intent(this, ProximityService.class);
+        // add any extra data to serviceIntent if needed
+        startService(serviceIntent);
     }
     public void goto_google_search(View view) {
         Intent intent = new Intent(FeedActivity.this,SearchActivity.class);
