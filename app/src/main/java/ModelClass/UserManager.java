@@ -116,6 +116,40 @@ public class UserManager {
         }
     }
 
+    public interface NotificationCallback {
+        void onNotificationsReceived(List<Notification> notifications);
+        void onError(String error);
+    }
 
+    public static void getCurrentUserNotifications(NotificationCallback notificationCallback) {
+        DatabaseReference notificationsRef = FirebaseDatabase.getInstance().getReference("notifications");
+        FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+
+        if (firebaseUser != null) {
+            String userEmail = firebaseUser.getEmail();
+
+            notificationsRef.orderByChild("forUser").equalTo(userEmail)
+                    .addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                            if (dataSnapshot.exists()) {
+                                List<Notification> notifications = new ArrayList<>();
+                                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                                    Notification notification = snapshot.getValue(Notification.class);
+                                    notifications.add(notification);
+                                }
+                                notificationCallback.onNotificationsReceived(notifications);
+                            } else {
+                                notificationCallback.onError("No notifications found");
+                            }
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError error) {
+                            notificationCallback.onError("Error while reading notifications");
+                        }
+                    });
+        }
+    }
 
 }
