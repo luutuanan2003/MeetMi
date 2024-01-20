@@ -1,6 +1,9 @@
 package ModelClass;
 
 public class Notification {
+    public Notification() {
+    }
+
     private String dateTime, fromUser, fromUserAvatar,fromEmail, isComment, isReaction,commentData,forUser;
 
     public String getFromEmail() {

@@ -4,27 +4,25 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.BaseAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
 import com.example.meetmi.R;
-import com.example.meetmi.Users;
 
 import java.util.List;
 
 import ModelClass.Notification;
 import de.hdodenhof.circleimageview.CircleImageView;
 
-import android.app.AlertDialog;
-import android.widget.ImageView;
 
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
 
-import ModelClass.UserManager;
+import com.google.android.material.imageview.ShapeableImageView;
+import com.squareup.picasso.Picasso;
 
-public class NotificationAdapter extends BaseAdapter {
+
+public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapter.NotiViewHolder> {
     private List<Notification> notificationLists;
     private LayoutInflater inflater;
     private Context context;
@@ -34,41 +32,50 @@ public class NotificationAdapter extends BaseAdapter {
         this.inflater = LayoutInflater.from(context);
         this.context = context;
     }
-
     @Override
-    public int getCount() {
+    public int getItemCount() {
         return notificationLists.size();
     }
 
     @Override
-    public Object getItem(int position) {
-        return notificationLists.get(position);
+    public NotiViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        View view = LayoutInflater.from(context).inflate(R.layout.list_item_noti, parent, false);
+        return new NotiViewHolder(view);
     }
+
+
+    @Override
+    public void onBindViewHolder(NotiViewHolder holder, int position) {
+        Notification noti = notificationLists.get(position);
+
+        if (noti.getIsComment() ==  "1") {
+            holder.notitype.setText("Someone just commented on your post");
+        } else {
+            holder.notitype.setText("Someone just liked on your post");
+        }
+        holder.nickName.setText(noti.getFromUser());
+        // Load image using Picasso
+        Picasso.get().load(noti.getFromUserAvatar()).into(holder.avatar);
+
+    }
+
 
     @Override
     public long getItemId(int position) {
         return position;
     }
 
-    @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
-        ViewHolder holder;
-        if (convertView == null) {
-            convertView = inflater.inflate(R.layout.list_item_noti, parent, false);
-            holder = new ViewHolder();
-            holder.avatar = convertView.findViewById(R.id.userAvatar_notification);
-            holder.nickName = convertView.findViewById(R.id.userName_notification);
-            holder.notitype = convertView.findViewById(R.id.userNotification);
-            convertView.setTag(holder);
-        } else {
-            holder = (ViewHolder) convertView.getTag();
-        }
-        return convertView;
-    }
-
-    static class ViewHolder {
+    public static class NotiViewHolder extends RecyclerView.ViewHolder {
         CircleImageView avatar;
         TextView nickName, notitype;
+
+        public NotiViewHolder(View itemView) {
+            super(itemView);
+            avatar = itemView.findViewById(R.id.userAvatar_notification);
+            nickName = itemView.findViewById(R.id.userName_notification);
+            notitype = itemView.findViewById(R.id.userNotification);
+
+        }
     }
 
 }
