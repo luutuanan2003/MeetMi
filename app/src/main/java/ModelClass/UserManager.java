@@ -152,4 +152,68 @@ public class UserManager {
         }
     }
 
+    public interface FriendsCallback {
+        void onFriendsReceived(List<String> friendEmails);
+        void onError(String error);
+    }
+
+    public static void getCurrentUserFriends(FriendsCallback friendsCallback) {
+        DatabaseReference usersRef = FirebaseDatabase.getInstance().getReference("users");
+        FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+
+        if (firebaseUser != null) {
+            String userEmail = firebaseUser.getEmail();
+
+            // Assuming the 'friends' are stored under each user's data
+            usersRef.child(firebaseUser.getUid()).child("friends").addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    if (dataSnapshot.exists()) {
+                        List<String> friendEmails = new ArrayList<>();
+                        for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                            String friendEmail = snapshot.getValue(String.class);
+                            friendEmails.add(friendEmail);
+                        }
+                        friendsCallback.onFriendsReceived(friendEmails);
+                    } else {
+                        friendsCallback.onError("No friends found");
+                    }
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+                    friendsCallback.onError("Error while reading friends");
+                }
+            });
+        }
+    }
+    // Add this method to your UserManager class
+    public static void getUserPostsByEmail(String email, PostsCallback postsCallback) {
+        DatabaseReference postsRef = FirebaseDatabase.getInstance().getReference("posts");
+        postsRef.orderByChild("user_Email").equalTo(email)
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        if (dataSnapshot.exists()) {
+                            List<Posts> postsByEmail = new ArrayList<>();
+                            for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
+                                Posts post = postSnapshot.getValue(Posts.class);
+                                if (post != null) {
+                                    postsByEmail.add(post);
+                                }
+                            }
+                            postsCallback.onPostsReceived(postsByEmail);
+                        } else {
+                            postsCallback.onError("No posts found for the email: " + email);
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+                        postsCallback.onError("Error while reading posts: " + databaseError.getMessage());
+                    }
+                });
+    }
+
+
 }

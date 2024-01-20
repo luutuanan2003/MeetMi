@@ -25,11 +25,14 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.MutableData;
 import com.google.firebase.database.Transaction;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.firestore.auth.User;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -44,6 +47,8 @@ import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import android.Manifest;
+import ModelClass.UserManager.FriendsCallback;
+
 
 
 public class FeedActivity extends AppCompatActivity implements FeedPostAdapter.OnPostInteractionListener {
@@ -54,6 +59,9 @@ public class FeedActivity extends AppCompatActivity implements FeedPostAdapter.O
     private FeedPostAdapter feedPostAdapter;
     private ImageView commentSection,reactionSection;
     private List<Posts> postList = new ArrayList<>();
+    private List<String> friendEmails;
+
+    private String currentUserNickname;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,23 +78,117 @@ public class FeedActivity extends AppCompatActivity implements FeedPostAdapter.O
         postsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         feedPostAdapter = new FeedPostAdapter(this, postList,this);
         postsRecyclerView.setAdapter(feedPostAdapter);
+        friendEmails = new ArrayList<>();
 
-        UserManager.getUserPosts(new UserManager.PostsCallback() {
-            @Override
-            public void onPostsReceived(List<Posts> posts) {
-                postList.clear();
-                postList.addAll(posts);
-                feedPostAdapter.notifyDataSetChanged();
-            }
 
-            @Override
-            public void onError(String error) {
-                Log.e("FirebaseCheck", error);
-            }
-        });
+        fetchCurrentUserAndPosts();
+
+
         checkLocationPermissionAndStartService();
 
     }
+
+    private void fetchCurrentUserAndPosts() {
+        UserManager.getCurrentUserDetail(new UserManager.UserCallback() {
+            @Override
+            public void onCallback(Users user) {
+                if (user != null) {
+                    currentUserNickname = user.getNickname();
+                    Log.d("CurrentNickname", "Current User Nickname: " + currentUserNickname);
+                    // Fetch posts for the current user
+                    fetchPosts(currentUserNickname);
+                    // Fetch posts for the user's friends
+                    fetchFriendsPosts();
+                } else {
+                    Log.e("FeedActivity", "User details are not available.");
+                }
+            }
+        });
+    }
+
+    private void fetchPosts(String nickname) {
+        Log.d("FeedActivity", "Fetching posts for: " + nickname);
+        mDatabase.child("posts").orderByChild("nickname").equalTo(nickname)
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        if (!dataSnapshot.exists()) {
+                            Log.d("FeedActivity", "No posts found for: " + nickname);
+                            return;
+                        }
+                        for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
+                            Posts post = postSnapshot.getValue(Posts.class);
+                            if (post != null) {
+                                postList.add(post);
+                            }
+                        }
+                        feedPostAdapter.notifyDataSetChanged();
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+                        Log.e("FeedActivity", "Database error: " + databaseError.getMessage());
+                    }
+                });
+    }
+
+    private void fetchFriendsPosts() {
+        // Assuming currentUserNickname is already set
+        mDatabase.child("users").child(currentUserNickname).child("friends")
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        for (DataSnapshot friendSnapshot : dataSnapshot.getChildren()) {
+                            String friendEmail = friendSnapshot.getValue(String.class);
+                            if (friendEmail != null && !friendEmail.isEmpty()) {
+                                fetchPostsByEmail(friendEmail);
+                            } else {
+                                Log.e("FeedActivity", "A friend's email is null or empty.");
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+                        Log.e("FirebaseCheck", "Failed to read friends: " + databaseError.getMessage());
+                    }
+                });
+    }
+
+    private void fetchPostsByEmail(String email) {
+        mDatabase.child("posts").orderByChild("user_Email").equalTo(email)
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        if (!dataSnapshot.exists()) {
+                            Log.d("FeedActivity", "No posts found for email: " + email);
+                            return;
+                        }
+                        for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
+                            Posts post = postSnapshot.getValue(Posts.class);
+                            if (post != null) {
+                                postList.add(post);
+                            }
+                        }
+                        Collections.sort(postList, new Comparator<Posts>() {
+                            @Override
+                            public int compare(Posts post1, Posts post2) {
+                                // Example sorting: by date, replace with your own logic
+                                return post1.getDateTime().compareTo(post2.getDateTime());
+                            }
+                        });
+                        feedPostAdapter.notifyDataSetChanged();
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+                        Log.e("FeedActivity", "Database error: " + databaseError.getMessage());
+                    }
+                });
+    }
+
+
+
 
     private void checkLocationPermissionAndStartService() {
         if (ContextCompat.checkSelfPermission(this,
@@ -297,5 +399,6 @@ public class FeedActivity extends AppCompatActivity implements FeedPostAdapter.O
 
         builder.show();
     }
+
 
 }

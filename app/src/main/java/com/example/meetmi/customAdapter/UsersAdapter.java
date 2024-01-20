@@ -40,9 +40,9 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.UserViewHold
         holder.bindTo(currentUser);
 
         holder.addButton.setOnClickListener(v -> {
-            String friendUsername = currentUser.getUsername(); // Use username
+            String friendNickname = String.valueOf(currentUser.getNickname()); // Use username
             if (listener != null) {
-                listener.onAddFriendClicked(friendUsername);
+                listener.onAddFriendClicked(friendNickname);
             }
         });
     }
@@ -76,7 +76,7 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.UserViewHold
     }
 
     public interface OnItemClickListener {
-        void onAddFriendClicked(String friendUsername);
+        void onAddFriendClicked(String friendNickname);
     }
 
     

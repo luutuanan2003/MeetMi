@@ -9,46 +9,37 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import com.bumptech.glide.Glide;
 import com.example.meetmi.R;
-import com.example.meetmi.Users;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.List;
 
 import ModelClass.Posts;
-import ModelClass.UserCallback;
-import ModelClass.UserManager;
 import de.hdodenhof.circleimageview.CircleImageView;
-
-
 
 public class PostAdapter extends BaseAdapter {
 
-
-    private List<Users> users;
+    private List<Posts> posts; // Changed from List<Users> to List<Posts>
     private LayoutInflater inflater;
     private Context context;
-    private DatabaseReference mDatabase =  FirebaseDatabase.getInstance().getReference() ;
+    private DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
 
-    public PostAdapter(Context context, List<Users> users) {
-        this.users = users;
+    public PostAdapter(Context context, List<Posts> posts) {
+        this.posts = posts; // Changed from users to posts
         this.inflater = LayoutInflater.from(context);
         this.context = context;
     }
 
     @Override
     public int getCount() {
-        return users.size();
+        return posts.size(); // Changed from users.size() to posts.size()
     }
 
     @Override
     public Object getItem(int position) {
-        return users.get(position);
+        return posts.get(position); // Changed from users.get(position) to posts.get(position)
     }
 
     @Override
@@ -63,7 +54,6 @@ public class PostAdapter extends BaseAdapter {
             convertView = inflater.inflate(R.layout.list_item_noti, parent, false);
             holder = new ViewHolder();
 
-
             holder.avatar = convertView.findViewById(R.id.userAvatar_post);
             holder.userImage_post = convertView.findViewById(R.id.userImage_post);
             holder.nickName = convertView.findViewById(R.id.username_post);
@@ -73,30 +63,11 @@ public class PostAdapter extends BaseAdapter {
             holder = (ViewHolder) convertView.getTag();
         }
 
-        // what is this for?
-        UserManager.getCurrentUserDetail(new UserManager.UserCallback() {
-            @Override
-            public void onCallback(Users user) {
-                if (user != null) {
-                    user = users.get(position);
-                    holder.nickName.setText(user.getNickname());
-                    Glide.with(context).load(user.getAvatar()).into(holder.avatar);
-                    // for the photo of the post use the GalleryAdapter in the Activity class
-
-                    //TODO: implement this method
-                    //holder.caption.setText(post.getCaption);
-                } else {
-                    showUserNotFoundDialog();
-                }
-            }
-        });
-
-
-
-        //TODO: have a post class so that we can call the post and get the information here
-//        holder.textView.setText(post.getCaption());
-//        holder.textView.setText(post.getImage());
-
+        Posts post = posts.get(position); // Get the post at the current position
+        holder.nickName.setText(post.getNickname()); // Assuming Posts class has getNickname method
+        Glide.with(context).load(post.getAvatar()).into(holder.avatar); // Assuming Posts class has getAvatar method
+        holder.caption.setText(post.getCaption()); // Set the caption of the post
+        Glide.with(context).load(post.getPhoto()).into(holder.userImage_post); // Assuming Posts class has getImageUrl method
 
         return convertView;
     }
@@ -111,15 +82,10 @@ public class PostAdapter extends BaseAdapter {
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         builder.setTitle("User Not Found");
         builder.setMessage("The user you are looking for does not exist.");
-        builder.setPositiveButton("OK", (dialog, id) -> {
-            dialog.dismiss();
-        });
-        builder.setNegativeButton("Cancel", (dialog, id) -> {
-            dialog.dismiss();
-        });
+        builder.setPositiveButton("OK", (dialog, id) -> dialog.dismiss());
+        builder.setNegativeButton("Cancel", (dialog, id) -> dialog.dismiss());
 
         AlertDialog dialog = builder.create();
         dialog.show();
     }
-
 }

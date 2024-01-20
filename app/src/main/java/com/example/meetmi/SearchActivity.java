@@ -15,6 +15,7 @@ import android.widget.EditText;
 import android.widget.Button;
 import android.widget.Toast;
 
+
 import com.example.meetmi.customAdapter.FriendsAdapter;
 import com.example.meetmi.customAdapter.UsersAdapter;
 import com.google.firebase.database.DataSnapshot;
@@ -106,43 +107,60 @@ public class SearchActivity extends AppCompatActivity implements UsersAdapter.On
     }
 
     @Override
-    public void onAddFriendClicked(String friendUsername) {
+    public void onAddFriendClicked(String friendNickname) {
         if (loggedInEmail != null && !loggedInEmail.isEmpty()) {
-            addFriendByUsername(loggedInEmail, friendUsername);
+            addFriendByNickname(loggedInEmail, friendNickname);
         }
         // else handle the case where loggedInUsername is not available
     }
 
-    private void addFriendByUsername(String loggedInEmail, String friendUsername) {
+    private void addFriendByNickname(String loggedInEmail, String friendNickname) {
         DatabaseReference usersRef = mDatabase.child("users");
 
-        // Query the users by email to find the logged-in user's unique key
+        // First, find the logged-in user's key
         usersRef.orderByChild("email").equalTo(loggedInEmail)
                 .addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                         if (dataSnapshot.exists() && dataSnapshot.getChildrenCount() > 0) {
-                            // Assuming email is unique and can only have one entry, get the unique key
                             DataSnapshot userSnapshot = dataSnapshot.getChildren().iterator().next();
                             String loggedInUserKey = userSnapshot.getKey();
 
-                            // Now we have the unique key, add the friendUsername to the "friends" path
-                            DatabaseReference friendsRef = usersRef.child(loggedInUserKey).child("friends");
-                            friendsRef.child(friendUsername).setValue("Friend of" + " " + currentusername); // Using 'true' as a placeholder value
-                            Toast.makeText(SearchActivity.this, "Friend has been added", Toast.LENGTH_SHORT).show();
+                            // Now, find the friend's email by their nickname
+                            usersRef.orderByChild("nickname").equalTo(friendNickname)
+                                    .addListenerForSingleValueEvent(new ValueEventListener() {
+                                        @Override
+                                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                            if (dataSnapshot.exists() && dataSnapshot.getChildrenCount() > 0) {
+                                                DataSnapshot friendSnapshot = dataSnapshot.getChildren().iterator().next();
+                                                String friendEmail = friendSnapshot.child("email").getValue(String.class);
+
+                                                // Add the friend's email to the "friends" node of the logged-in user
+                                                DatabaseReference friendsRef = usersRef.child(loggedInUserKey).child("friends");
+                                                friendsRef.child(friendNickname).setValue(friendEmail);
+                                                Toast.makeText(SearchActivity.this, "Friend has been added", Toast.LENGTH_SHORT).show();
+                                            } else {
+                                                Log.e("SearchActivity", "Friend not found in the database.");
+                                            }
+                                        }
+
+                                        @Override
+                                        public void onCancelled(@NonNull DatabaseError databaseError) {
+                                            Log.e("SearchActivity", "Database error: " + databaseError.getMessage());
+                                        }
+                                    });
                         } else {
-                            // Handle the case where the logged-in user is not found
                             Log.e("SearchActivity", "Logged-in user not found in the database.");
                         }
                     }
 
                     @Override
                     public void onCancelled(@NonNull DatabaseError databaseError) {
-                        // Handle database error
                         Log.e("SearchActivity", "Database error: " + databaseError.getMessage());
                     }
                 });
     }
+
 
     public void showFriendsDialog(View view) {
         UserManager.getCurrentUserDetail(new UserManager.UserCallback() {
