@@ -100,6 +100,7 @@ public class Users {
         this.friends = friends;
     }
 
+
     public String getPhotoFrameId() {
         return photoFrameId;
     }

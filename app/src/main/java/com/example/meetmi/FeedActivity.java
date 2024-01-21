@@ -19,6 +19,8 @@ import android.widget.Toast;
 import com.example.meetmi.customAdapter.CommentAdapter;
 import com.example.meetmi.customAdapter.FeedPostAdapter;
 import com.example.meetmi.customAdapter.PostAdapter;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -79,50 +81,35 @@ public class FeedActivity extends AppCompatActivity implements FeedPostAdapter.O
         feedPostAdapter = new FeedPostAdapter(this, postList,this);
         postsRecyclerView.setAdapter(feedPostAdapter);
         friendEmails = new ArrayList<>();
-
-
-        fetchCurrentUserAndPosts();
-
+        fetchCurrentUserAndFriendsPosts();
 
         checkLocationPermissionAndStartService();
 
     }
 
-    private void fetchCurrentUserAndPosts() {
-        UserManager.getCurrentUserDetail(new UserManager.UserCallback() {
-            @Override
-            public void onCallback(Users user) {
-                if (user != null) {
-                    currentUserNickname = user.getNickname();
-                    Log.d("CurrentNickname", "Current User Nickname: " + currentUserNickname);
-                    // Fetch posts for the current user
-                    fetchPosts(currentUserNickname);
-                    // Fetch posts for the user's friends
-                    fetchFriendsPosts(currentUserNickname);
-                } else {
-                    Log.e("FeedActivity", "User details are not available.");
-                }
-            }
-        });
-    }
 
-    private void fetchPosts(String nickname) {
-        Log.d("FeedActivity", "Fetching posts for: " + nickname);
-        mDatabase.child("posts").orderByChild("nickname").equalTo(nickname)
+private void fetchCurrentUserAndFriendsPosts() {
+    // Get the current user's email
+    FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
+    if (currentUser != null) {
+        String currentUserEmail = currentUser.getEmail();
+        // Start with adding the current user's email to the list
+        List<String> userEmails = new ArrayList<>();
+        userEmails.add(currentUserEmail);
+
+        // Get the current user's friends' emails and add them to the list
+        mDatabase.child("users").orderByChild("email").equalTo(currentUserEmail)
                 .addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                        if (!dataSnapshot.exists()) {
-                            Log.d("FeedActivity", "No posts found for: " + nickname);
-                            return;
-                        }
-                        for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
-                            Posts post = postSnapshot.getValue(Posts.class);
-                            if (post != null) {
-                                postList.add(post);
+                        for (DataSnapshot userSnapshot : dataSnapshot.getChildren()) {
+                            Users user = userSnapshot.getValue(Users.class);
+                            if (user != null && user.getFriends() != null) {
+                                userEmails.addAll(user.getFriends().values());
                             }
                         }
-                        feedPostAdapter.notifyDataSetChanged();
+                        // Now fetch the posts for all emails in the userEmails list
+                        fetchPostsForEmails(userEmails);
                     }
 
                     @Override
@@ -131,61 +118,31 @@ public class FeedActivity extends AppCompatActivity implements FeedPostAdapter.O
                     }
                 });
     }
+}
 
-    private void fetchFriendsPosts(String nickname) {
-        // Assuming currentUserNickname is already set
-        mDatabase.child("users").child(nickname).child("friends")
-                .addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                        for (DataSnapshot friendSnapshot : dataSnapshot.getChildren()) {
-                            String friendEmail = friendSnapshot.getValue(String.class);
-                            if (friendEmail != null && !friendEmail.isEmpty()) {
-                                fetchPostsByEmail(friendEmail);
-                            } else {
-                                Log.e("FeedActivity", "A friend's email is null or empty.");
+    private void fetchPostsForEmails(List<String> userEmails) {
+        for (String email : userEmails) {
+            mDatabase.child("posts").orderByChild("user_Email").equalTo(email)
+                    .addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                            for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
+                                Posts post = postSnapshot.getValue(Posts.class);
+                                if (post != null && !postList.contains(post)) {
+                                    postList.add(post);
+                                }
                             }
+                            feedPostAdapter.notifyDataSetChanged();
                         }
-                    }
 
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError databaseError) {
-                        Log.e("FirebaseCheck", "Failed to read friends: " + databaseError.getMessage());
-                    }
-                });
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError databaseError) {
+                            Log.e("FeedActivity", "Database error: " + databaseError.getMessage());
+                        }
+                    });
+        }
     }
 
-    private void fetchPostsByEmail(String email) {
-        mDatabase.child("posts").orderByChild("user_Email").equalTo(email)
-                .addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                        if (!dataSnapshot.exists()) {
-                            Log.d("FeedActivity", "No posts found for email: " + email);
-                            return;
-                        }
-                        for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
-                            Posts post = postSnapshot.getValue(Posts.class);
-                            if (post != null) {
-                                postList.add(post);
-                            }
-                        }
-                        Collections.sort(postList, new Comparator<Posts>() {
-                            @Override
-                            public int compare(Posts post1, Posts post2) {
-                                // Example sorting: by date, replace with your own logic
-                                return post1.getDateTime().compareTo(post2.getDateTime());
-                            }
-                        });
-                        feedPostAdapter.notifyDataSetChanged();
-                    }
-
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError databaseError) {
-                        Log.e("FeedActivity", "Database error: " + databaseError.getMessage());
-                    }
-                });
-    }
 
 
 

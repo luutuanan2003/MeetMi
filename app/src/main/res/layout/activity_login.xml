@@ -35,7 +35,14 @@
             android:fontFamily="@font/asap"
             android:gravity="center"
             android:text="Log in with your Meet Mi account"
-            android:textColor="#FFFFFF" />
+            android:textColor="#FFFFFF"
+            />
+
+
+        <com.google.android.gms.common.SignInButton
+            android:id="@+id/google_sign_in_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
 
         <EditText
             android:id="@+id/usernameLogin"
@@ -101,6 +108,8 @@
             android:textColor="#9E9E9E"
             app:backgroundTint="#FFFFFF"
             app:cornerRadius="5dp" />
+
+
 
         <!-- Existing layout components -->
 
