@@ -129,6 +129,7 @@ private void fetchCurrentUserAndFriendsPosts() {
                             for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
                                 Posts post = postSnapshot.getValue(Posts.class);
                                 if (post != null && !postList.contains(post)) {
+                                    post.setKeyID(postSnapshot.getKey());
                                     postList.add(post);
                                 }
                             }
@@ -209,6 +210,7 @@ private void fetchCurrentUserAndFriendsPosts() {
     public void onCommentClick(int position) {
         // Retrieve the post object
         Posts post = postList.get(position);
+
 
         Map<String, String> commentss = post.getComments();
         if (commentss == null) {
