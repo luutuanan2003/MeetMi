@@ -59,11 +59,8 @@ public class FeedActivity extends AppCompatActivity implements FeedPostAdapter.O
     private DatabaseReference mDatabase;
     private RecyclerView postsRecyclerView;
     private FeedPostAdapter feedPostAdapter;
-    private ImageView commentSection,reactionSection;
-    private List<Posts> postList = new ArrayList<>();
-    private List<String> friendEmails;
 
-    private String currentUserNickname;
+    private List<Posts> postList = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,7 +77,7 @@ public class FeedActivity extends AppCompatActivity implements FeedPostAdapter.O
         postsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         feedPostAdapter = new FeedPostAdapter(this, postList,this);
         postsRecyclerView.setAdapter(feedPostAdapter);
-        friendEmails = new ArrayList<>();
+
         fetchCurrentUserAndFriendsPosts();
 
         checkLocationPermissionAndStartService();
@@ -224,7 +221,7 @@ private void fetchCurrentUserAndFriendsPosts() {
         // Inflate and set the layout for the dialog containing the RecyclerView
         View dialogView = getLayoutInflater().inflate(R.layout.dialog_comments_list, null);
         RecyclerView commentsRecyclerView = dialogView.findViewById(R.id.rv_comments); // RecyclerView in your dialog_comments_list.xml
-        // Initialize RecyclerView with a layout manager and adapter (Assuming you have a CommentsAdapter)
+        // Initialize RecyclerView with a layout manager and adapter
         commentsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         CommentAdapter commentsAdapter = new CommentAdapter(post.getComments()); // pass the comments from the post
         commentsRecyclerView.setAdapter(commentsAdapter);

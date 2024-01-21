@@ -55,17 +55,7 @@ public class NotificationActivity extends AppCompatActivity {
 
             }
         });
-//        the flow of the notification list
-//        listView = findViewById(R.id.listView);
-//
-//        // Populate the user list
-//        userList = new ArrayList<>();
-//        userList.add(new User("image_url_1", "User 1"));
-//        userList.add(new User("image_url_2", "User 2"));
-//        // Add more users...
-//
-//        adapter = new UserAdapter(this, userList);
-//        listView.setAdapter(adapter);
+
     }
 
     public void goto_feed(View view) {
