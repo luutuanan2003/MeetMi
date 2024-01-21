@@ -98,7 +98,7 @@ public class FeedActivity extends AppCompatActivity implements FeedPostAdapter.O
                     // Fetch posts for the current user
                     fetchPosts(currentUserNickname);
                     // Fetch posts for the user's friends
-                    fetchFriendsPosts();
+                    fetchFriendsPosts(currentUserNickname);
                 } else {
                     Log.e("FeedActivity", "User details are not available.");
                 }
@@ -132,9 +132,9 @@ public class FeedActivity extends AppCompatActivity implements FeedPostAdapter.O
                 });
     }
 
-    private void fetchFriendsPosts() {
+    private void fetchFriendsPosts(String nickname) {
         // Assuming currentUserNickname is already set
-        mDatabase.child("users").child(currentUserNickname).child("friends")
+        mDatabase.child("users").child(nickname).child("friends")
                 .addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
