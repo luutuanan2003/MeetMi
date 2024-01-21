@@ -328,6 +328,7 @@ private void fetchCurrentUserAndFriendsPosts() {
 
                     mDatabase.child("posts").child(post.getKeyID()).child("comments")
                             .push().setValue(currentUserNickname + ": " + comment);
+                    Log.d("Comment",post.getKeyID());
 
 
                     // Create a notification document in the Realtime Database
