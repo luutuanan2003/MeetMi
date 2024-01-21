@@ -308,20 +308,7 @@ public class ProfileActivity extends AppCompatActivity implements OnItemClickLis
     }
 
 
-    private void keepDialogOpen(DialogInterface dialog) {
-        // The AlertDialog is an instance of Dialog, so we can get it here and prevent it from closing
-        if (dialog instanceof AlertDialog) {
-            AlertDialog alertDialog = (AlertDialog) dialog;
-            Button positiveButton = alertDialog.getButton(AlertDialog.BUTTON_POSITIVE);
-            // Override the button click listener to prevent the dialog from closing
-            positiveButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    // Intentionally empty to prevent the dialog from closing
-                }
-            });
-        }
-    }
+
 
     private void showChangeNicknameDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(ProfileActivity.this);

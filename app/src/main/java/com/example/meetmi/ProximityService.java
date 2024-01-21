@@ -44,9 +44,7 @@ public class ProximityService extends Service {
     private LocationListener locationListener;
     private String currentUserEmail;
 
-    private double currentUserlongtitude;
 
-    private double currentUserLatitude;
 
     @Override
     public void onCreate() {
@@ -56,7 +54,7 @@ public class ProximityService extends Service {
         databaseReference = FirebaseDatabase.getInstance().getReference("users");
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 
-        // Asynchronously get the current user's details
+
         UserManager.getCurrentUserDetail(new UserManager.UserCallback() {
             @Override
             public void onCallback(Users user) {
@@ -76,7 +74,7 @@ public class ProximityService extends Service {
 
             }
 
-            // ... [Implement other LocationListener methods if necessary] ...
+
         };
 
         if (checkLocationPermissions()) {

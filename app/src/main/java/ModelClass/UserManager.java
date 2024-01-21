@@ -164,7 +164,7 @@ public class UserManager {
         if (firebaseUser != null) {
             String userEmail = firebaseUser.getEmail();
 
-            // Assuming the 'friends' are stored under each user's data
+
             usersRef.child(firebaseUser.getUid()).child("friends").addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -187,7 +187,7 @@ public class UserManager {
             });
         }
     }
-    // Add this method to your UserManager class
+
     public static void getUserPostsByEmail(String email, PostsCallback postsCallback) {
         DatabaseReference postsRef = FirebaseDatabase.getInstance().getReference("posts");
         postsRef.orderByChild("user_Email").equalTo(email)

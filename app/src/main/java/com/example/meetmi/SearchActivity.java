@@ -203,5 +203,5 @@ public class SearchActivity extends AppCompatActivity implements UsersAdapter.On
 
 
 
-    // Add other necessary methods for SearchActivity
+
 }
