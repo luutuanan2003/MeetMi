@@ -49,9 +49,9 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
         Notification noti = notificationLists.get(position);
 
         if (noti.getIsComment().toString().equals("1")) {
-            holder.notitype.setText("Someone just commented on your post");
+            holder.notitype.setText("just commented on your post");
         } else {
-            holder.notitype.setText("Someone just liked on your post");
+            holder.notitype.setText("just liked on your post");
         }
         holder.nickName.setText(noti.getFromUser());
         // Load image using Picasso

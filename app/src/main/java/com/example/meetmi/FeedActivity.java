@@ -334,7 +334,7 @@ private void fetchCurrentUserAndFriendsPosts() {
                     DatabaseReference notificationRef = mDatabase.child("notifications").push();
                     notificationRef.setValue(new Notification(
                             post.getDateTime(),
-                            post.getNickname(),
+                            currentUserNickname,
                             post.getUser_Email(),
                             post.getAvatar(),
                             "1", // isComment
